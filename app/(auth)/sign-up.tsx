@@ -4,10 +4,11 @@ import { Text, View } from 'react-native';
 import { Link, useRouter } from 'expo-router';
 import Toast from 'react-native-toast-message';
 
-import { TextInput } from 'components/Input';
-import { DefaultButton, ProviderButton } from 'components/Button';
-import { oAuthLogin, supabase } from 'utils/supabase';
-import { validateEmail } from 'utils/other';
+import { TextInput } from '~components/Input';
+import { DefaultButton, ProviderButton } from '~components/Button';
+import { oAuthLogin, supabase } from '~utils/supabase';
+import { validateEmail } from '~utils/other';
+import { findOrCreateUser } from '~services/supabase';
 
 export default function SignUpScreen() {
   const router = useRouter();
@@ -62,11 +63,7 @@ export default function SignUpScreen() {
     }
 
     if (data) {
-      const { data: user } = await supabase
-        .from('users')
-        .select('email')
-        .eq('email', lowerCaseEmail)
-        .single();
+      const [user] = await findOrCreateUser(lowerCaseEmail, data?.user?.id!);
 
       if (user) {
         Toast.show({
@@ -74,13 +71,6 @@ export default function SignUpScreen() {
           text1: 'Email already exists.',
         });
       } else {
-        await supabase.from('users').insert([
-          {
-            email: lowerCaseEmail,
-            uuid: data.user?.id,
-          },
-        ]);
-
         router.push({
           pathname: '/verify',
           params: {
@@ -139,9 +129,9 @@ export default function SignUpScreen() {
           </Link>
         </Text>
         <View className='relative w-full mt-2 mb-8'>
-          <View className='w-full h-[1px] bg-primaryText' />
+          <View className='w-full h-[1px] bg-tertiaryText' />
           <View className='absolute bg-primaryBackground left-[45%] -top-[10px]'>
-            <Text className='px-2 py-[2px] text-primaryText'>OR</Text>
+            <Text className='px-2 py-[2px] text-tertiaryText'>OR</Text>
           </View>
         </View>
 

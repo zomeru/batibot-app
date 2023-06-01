@@ -2,10 +2,11 @@ import { useState } from 'react';
 import { useLocalSearchParams, useNavigation } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { Text, View, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { handleSupabaseResendOTP, supabase } from 'utils/supabase';
-import { DefaultButton } from 'components/Button';
-import { TextInput } from 'components/Input';
 import Toast from 'react-native-toast-message';
+
+import { handleSupabaseResendOTP, supabase } from '~utils/supabase';
+import { DefaultButton } from '~components/Button';
+import { TextInput } from '~components/Input';
 
 export default function VerifyEmailScreen() {
   const searchParams = useLocalSearchParams();

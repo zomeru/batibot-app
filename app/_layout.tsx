@@ -6,8 +6,8 @@ import Toast from 'react-native-toast-message';
 import { SplashScreen, Stack } from 'expo-router';
 import { Buffer } from 'buffer';
 
-import { AuthProvider } from 'contexts';
-import CustomToast from 'components/CustomToast';
+import { AuthProvider } from '~contexts/index';
+import CustomToast from '~components/CustomToast';
 
 global.Buffer = Buffer;
 
@@ -51,7 +51,6 @@ function RootLayoutNav() {
       >
         <Stack.Screen name='(home)' />
         <Stack.Screen name='(auth)' />
-        <Stack.Screen name='modal' />
       </Stack>
       <Toast
         config={{

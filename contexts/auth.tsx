@@ -3,7 +3,8 @@ import { User } from '@supabase/supabase-js';
 import { useSegments } from 'expo-router/src/LocationProvider';
 import { useRouter } from 'expo-router';
 
-import { supabase } from 'utils/supabase';
+import { supabase } from '~utils/supabase';
+import { findOrCreateUser } from '~services/supabase';
 
 type UserContextProps = {
   user?: User;
@@ -48,15 +49,25 @@ export default function Provider({ children }: { children: React.ReactNode }) {
     async function getSession() {
       const { data } = await supabase.auth.getSession();
       const currentUser = data?.session?.user;
+      console.log('currentUser ID', currentUser?.id);
       setUser(currentUser);
+      if (currentUser) {
+        await findOrCreateUser(currentUser.email!, currentUser.id);
+      }
     }
 
     getSession().catch(console.error);
 
     const { data: authData } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        console.log(event, session);
-        setUser(session?.user);
+      async (event, session) => {
+        console.log(event, session?.user?.email);
+        console.log('identities', session?.user?.user_metadata);
+        const user = session?.user ?? undefined;
+        setUser(user);
+        console.log('New user ID', user?.id);
+        if (user) {
+          await findOrCreateUser(user.email!, user.id);
+        }
       }
     );
 

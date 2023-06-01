@@ -32,6 +32,7 @@ module.exports = {
       clerkPublishableKey: process.env.CLERK_PUBLISHABLE_KEY,
       supabaseServiceKey: process.env.SUPABASE_SERVICE_KEY,
       supabaseUrl: process.env.SUPABASE_URL,
+      OPENAI_API_KEY: process.env.OPENAI_API_KEY,
     },
   },
 };

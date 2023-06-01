@@ -14,35 +14,20 @@ export default function ProviderButton({
 }: ProviderButtonProps) {
   return (
     <TouchableOpacity
-      className={`w-full rounded-sm border border-primaryText border-[1px] flex flex-row items-center justify-center ${
+      className={`w-full rounded-sm border border-tertiaryText border-[1px] flex flex-row items-center justify-center ${
         className ?? ''
       }`}
       onPress={onPress}
     >
       {provider === 'Discord' ? (
-        <FontAwesome5
-          className='text-primaryText'
-          name='discord'
-          size={20}
-          color='#fffcfc'
-        />
+        <FontAwesome5 name='discord' size={20} color='#a0a7b8' />
       ) : provider === 'Google' ? (
-        <Ionicons
-          className='text-primaryText'
-          name='logo-google'
-          size={20}
-          color='#fffcfc'
-        />
+        <Ionicons name='logo-google' size={20} color='#a0a7b8' />
       ) : (
-        <AntDesign
-          className='text-primaryText'
-          name='github'
-          size={20}
-          color='#fffcfc'
-        />
+        <AntDesign name='github' size={20} color='#a0a7b8' />
       )}
 
-      <Text className='px-3 py-3 text-base text-white font-regular text-primaryText'>
+      <Text className='px-3 py-3 text-base text-white font-regular text-tertiaryText'>
         Continue with {provider}
       </Text>
     </TouchableOpacity>

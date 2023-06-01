@@ -3,7 +3,7 @@ import { StatusBar } from 'expo-status-bar';
 import { Text, View } from 'react-native';
 import { DrawerActions } from '@react-navigation/native';
 
-import { DefaultButton } from 'components/Button';
+import { DefaultButton } from '~components/Button';
 
 export default function SettingsScreen() {
   const navigation = useNavigation();

@@ -1,14 +1,16 @@
 import { Text, TouchableOpacity, View } from 'react-native';
-import { Drawer } from '../../components/Drawer';
 import {
   DrawerContentComponentProps,
   DrawerContentScrollView,
   DrawerItemList,
 } from '@react-navigation/drawer';
 import { FontAwesome, Feather, AntDesign } from '@expo/vector-icons';
+import { useNavigation } from 'expo-router/src/useNavigation';
+import { DrawerActions } from '@react-navigation/native';
 
-import { supabase } from '../../utils/supabase';
-import { useAuth } from '../../contexts/auth';
+import { supabase } from '~utils/supabase';
+import { useAuth } from '~contexts/auth';
+import { Drawer } from '~components/Drawer';
 
 export const unstable_settings = {
   // Ensure that reloading on `/modal` keeps a back button present.
@@ -44,12 +46,36 @@ function CustomDrawerContent(props: DrawerContentComponentProps) {
   );
 }
 
+const MenuIcon = (props: { tintColor?: string }) => {
+  const navigation = useNavigation();
+
+  return (
+    <TouchableOpacity
+      className='p-2 ml-2'
+      onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
+    >
+      <Feather name='menu' size={24} color={props.tintColor} />
+    </TouchableOpacity>
+  );
+};
+
 export default function HomeLayoutNavigator() {
   return (
     <Drawer
       initialRouteName='home'
       screenOptions={{
-        headerShown: false,
+        headerShown: true,
+        headerStyle: {
+          backgroundColor: '#1a1e24',
+        },
+        headerLeft: MenuIcon,
+        headerTintColor: '#3eb7d1',
+        headerShadowVisible: false,
+        headerTitleStyle: {
+          fontWeight: '400',
+          fontSize: 16,
+        },
+        headerTitle: 'New chat',
         drawerStyle: {
           backgroundColor: '#1a1e24',
         },

@@ -36,7 +36,7 @@ export const oAuthLogin = async (provider: OAuthProvider) => {
     path: '/auth/callback',
   });
 
-  const authUrl = `${supabaseUrl}/auth/v1/authorize?provider=${provider}&redirect_to=${redirectUrl}`;
+  const authUrl = `${supabaseUrl}/auth/v1/authorize?provider=${provider}&redirect_to=${redirectUrl}&prompt=consent`;
 
   const authSessionResponse = await AuthSession.startAsync({
     authUrl,

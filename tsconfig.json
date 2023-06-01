@@ -4,12 +4,13 @@
     "strict": true,
     "baseUrl": "./",
     "paths": {
-      "components/*": ["components/*"],
-      "utils/*": ["utils/*"],
-      "assets/*": ["assets/*"],
-      "contexts/*": ["contexts/*"],
-      "hooks/*": ["hooks/*"],
-      "constants/*": ["constants/*"]
+      "~components/*": ["components/*"],
+      "~utils/*": ["utils/*"],
+      "~assets/*": ["assets/*"],
+      "~contexts/*": ["contexts/*"],
+      "~hooks/*": ["hooks/*"],
+      "~constants/*": ["constants/*"],
+      "~services/*": ["services/*"]
     }
   }
 }
