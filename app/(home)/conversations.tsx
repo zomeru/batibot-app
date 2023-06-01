@@ -1,9 +1,9 @@
-import { Link, Stack, useNavigation } from 'expo-router';
+import { Link, useNavigation } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { Text, View } from 'react-native';
 import { DrawerActions } from '@react-navigation/native';
 
-import { DefaultButton } from '../../components/Button';
+import { DefaultButton } from 'components/Button';
 
 export default function ConversationsScreen() {
   const navigation = useNavigation();

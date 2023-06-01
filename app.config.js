@@ -5,7 +5,7 @@ module.exports = {
     version: '1.0.0',
     orientation: 'portrait',
     icon: './assets/images/icon.png',
-    scheme: 'myapp',
+    scheme: 'com.zomeru.batibot-app',
     userInterfaceStyle: 'automatic',
     splash: {
       image: './assets/images/splash.png',
@@ -15,12 +15,14 @@ module.exports = {
     assetBundlePatterns: ['**/*'],
     ios: {
       supportsTablet: true,
+      bundleIdentifier: 'com.zomeru.batibot-app',
     },
     android: {
       adaptiveIcon: {
         foregroundImage: './assets/images/adaptive-icon.png',
         backgroundColor: '#ffffff',
       },
+      package: 'com.zomeru.batibot_app',
     },
     web: {
       bundler: 'metro',

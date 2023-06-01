@@ -15,6 +15,12 @@ export default function AuthLayoutNavigator() {
           headerShown: false,
         }}
       />
+      <Stack.Screen
+        name='verify'
+        options={{
+          headerShown: false,
+        }}
+      />
     </Stack>
   );
 }

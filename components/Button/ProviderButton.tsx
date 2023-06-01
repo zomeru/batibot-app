@@ -3,18 +3,21 @@ import { TouchableOpacity, Text } from 'react-native';
 
 interface ProviderButtonProps {
   provider: 'Google' | 'Discord' | 'Github';
+  onPress?: () => void;
   className?: string;
 }
 
 export default function ProviderButton({
   provider,
   className,
+  onPress,
 }: ProviderButtonProps) {
   return (
     <TouchableOpacity
       className={`w-full rounded-sm border border-primaryText border-[1px] flex flex-row items-center justify-center ${
         className ?? ''
       }`}
+      onPress={onPress}
     >
       {provider === 'Discord' ? (
         <FontAwesome5

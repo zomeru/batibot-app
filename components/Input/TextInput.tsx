@@ -10,9 +10,18 @@ interface TextInputComponentProps {
   iconColor?: string;
   onChangeText?: (text: string) => void;
   value?: string;
-  setValue?: React.Dispatch<React.SetStateAction<string>>;
+  setValue?:
+    | React.Dispatch<React.SetStateAction<string>>
+    | ((text: string) => void);
   className?: string;
   secure?: boolean;
+  keyboardType?:
+    | 'default'
+    | 'email-address'
+    | 'numeric'
+    | 'phone-pad'
+    | 'number-pad';
+  maxLength?: number;
 }
 
 export default function TextInputComponent({
@@ -26,6 +35,8 @@ export default function TextInputComponent({
   setValue,
   className,
   secure = false,
+  keyboardType = 'default',
+  maxLength,
 }: TextInputComponentProps) {
   return (
     <View
@@ -34,10 +45,13 @@ export default function TextInputComponent({
       }`}
     >
       <TextInput
+        maxLength={maxLength}
+        autoFocus
+        keyboardType={keyboardType}
         secureTextEntry={iconName === 'eye-off-outline' || secure}
         className='flex flex-1 py-4 text-primaryBackground bg-primaryText'
         value={value}
-        placeholderTextColor='#292b37'
+        placeholderTextColor='#a9aab6'
         placeholder={placeholder}
         onChangeText={val => {
           if (setValue) setValue(val);

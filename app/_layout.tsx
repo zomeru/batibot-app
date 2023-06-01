@@ -3,8 +3,13 @@ import { useEffect } from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { useFonts } from 'expo-font';
 import Toast from 'react-native-toast-message';
-import { SplashScreen, Stack, usePathname } from 'expo-router';
-import { AuthProvider } from '../contexts';
+import { SplashScreen, Stack } from 'expo-router';
+import { Buffer } from 'buffer';
+
+import { AuthProvider } from 'contexts';
+import CustomToast from 'components/CustomToast';
+
+global.Buffer = Buffer;
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -36,12 +41,6 @@ export default function RootLayout() {
 }
 
 function RootLayoutNav() {
-  const pathname = usePathname();
-
-  console.log({
-    pathname,
-  });
-
   return (
     <AuthProvider>
       <Stack
@@ -54,7 +53,14 @@ function RootLayoutNav() {
         <Stack.Screen name='(auth)' />
         <Stack.Screen name='modal' />
       </Stack>
-      <Toast />
+      <Toast
+        config={{
+          success: props => <CustomToast {...props} />,
+          error: props => <CustomToast {...props} />,
+          info: props => <CustomToast {...props} />,
+          warning: props => <CustomToast {...props} />,
+        }}
+      />
     </AuthProvider>
   );
 }

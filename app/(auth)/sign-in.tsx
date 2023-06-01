@@ -1,43 +1,60 @@
 import { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { Text, View } from 'react-native';
-import { Link } from 'expo-router';
+import { Link, useRouter } from 'expo-router';
 import Toast from 'react-native-toast-message';
 
-import { TextInput } from '../../components/Input';
-import { DefaultButton, ProviderButton } from '../../components/Button';
-import { supabase } from '../../utils/supabase';
+import { TextInput } from 'components/Input';
+import { DefaultButton, ProviderButton } from 'components/Button';
+import { supabase, oAuthLogin, handleSupabaseResendOTP } from 'utils/supabase';
 
 export default function SignInScreen() {
+  const router = useRouter();
+
   const [seePassword, setSeePassword] = useState(false);
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
     if (!email || !password) {
       Toast.show({
         type: 'error',
-        text2: 'Email and password are required.',
+        text1: 'Email and password are required.',
       });
       return;
     }
-
-    let { data, error } = await supabase.auth.signInWithPassword({
+    setLoading(true);
+    let { error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
 
-    console.log('login', {
-      data,
-      error,
-    });
-
     if (error) {
+      const errMsg = error.message.toLowerCase();
+
+      if (errMsg === 'email not confirmed') {
+        // If email is not confirmed, resend OTP
+        await handleSupabaseResendOTP(email, setLoading);
+
+        router.push({
+          pathname: '/verify',
+          params: {
+            email: email.toLowerCase().trim(),
+            message: `Please verify your email address to continue using Batibot.`,
+          },
+        });
+
+        return;
+      }
+
       Toast.show({
         type: 'error',
-        text2: error.message,
+        text1: error.message,
       });
     }
+
+    setLoading(false);
   };
 
   return (
@@ -64,7 +81,13 @@ export default function SignInScreen() {
           value={password}
           setValue={setPassword}
         />
-        <DefaultButton title='Log in' className='mt-3' onPress={handleLogin} />
+        <DefaultButton
+          loading={loading}
+          disabled={loading}
+          title='Log in'
+          className='mt-3'
+          onPress={handleLogin}
+        />
         <Text className='my-5 text-sm font-medium text-center text-secondaryText'>
           Don't have an account?{' '}
           <Link className='text-primaryAccent' href='/sign-up'>
@@ -78,9 +101,20 @@ export default function SignInScreen() {
           </View>
         </View>
 
-        <ProviderButton provider='Google' className='mb-3' />
-        <ProviderButton provider='Discord' className='mb-3' />
-        <ProviderButton provider='Github' />
+        <ProviderButton
+          provider='Google'
+          className='mb-3'
+          onPress={async () => oAuthLogin('google')}
+        />
+        <ProviderButton
+          onPress={async () => oAuthLogin('discord')}
+          provider='Discord'
+          className='mb-3'
+        />
+        <ProviderButton
+          onPress={async () => oAuthLogin('github')}
+          provider='Github'
+        />
       </View>
     </View>
   );

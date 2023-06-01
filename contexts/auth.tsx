@@ -1,57 +1,54 @@
 import React, { createContext, useMemo, useEffect } from 'react';
-import { Session } from '@supabase/supabase-js';
+import { User } from '@supabase/supabase-js';
 import { useSegments } from 'expo-router/src/LocationProvider';
 import { useRouter } from 'expo-router';
 
-import { supabase } from '../utils/supabase';
+import { supabase } from 'utils/supabase';
 
-type ContextProps = {
-  session: Session | null;
+type UserContextProps = {
+  user?: User;
 };
 
-const AuthContext = createContext<Partial<ContextProps>>({});
+const AuthContext = createContext<UserContextProps>(
+  null as unknown as UserContextProps
+);
 
 export function useAuth() {
   return React.useContext(AuthContext);
 }
 
 // This hook will protect the route access based on user authentication.
-function useProtectedRoute(session: Session | null, userLoading: boolean) {
+function useProtectedRoute(user?: User) {
   const segments = useSegments();
   const router = useRouter();
 
   React.useEffect(() => {
     const inAuthGroup = segments[0] === '(auth)';
 
-    console.log({
-      segment: segments[0],
-    });
-
     if (
       // If the user is not signed in and the initial segment is not anything in the auth group.
-      !session &&
+      !user &&
       !inAuthGroup
     ) {
       // Redirect to the sign-in page.
       router.replace('/(auth)/sign-in');
-    } else if (session && inAuthGroup) {
+    } else if (user && inAuthGroup) {
       // Redirect away from the sign-in page.
       router.replace('/home');
     }
-  }, [session, segments]);
+  }, [user, segments]);
 }
 
 export default function Provider({ children }: { children: React.ReactNode }) {
-  const [session, setSession] = React.useState<Session | null>(null);
-  const [loading, setLoading] = React.useState(true);
+  const [user, setUser] = React.useState<User | undefined>();
 
-  useProtectedRoute(session, loading);
+  useProtectedRoute(user);
 
   useEffect(() => {
     async function getSession() {
       const { data } = await supabase.auth.getSession();
-      const newSession = data?.session;
-      setSession(newSession);
+      const currentUser = data?.session?.user;
+      setUser(currentUser);
     }
 
     getSession().catch(console.error);
@@ -59,7 +56,7 @@ export default function Provider({ children }: { children: React.ReactNode }) {
     const { data: authData } = supabase.auth.onAuthStateChange(
       (event, session) => {
         console.log(event, session);
-        setSession(session);
+        setUser(session?.user);
       }
     );
 
@@ -68,7 +65,7 @@ export default function Provider({ children }: { children: React.ReactNode }) {
     };
   }, []);
 
-  const value = useMemo(() => ({ session }), [session]);
+  const value = useMemo(() => ({ user }), [user]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

@@ -1,5 +1,3 @@
-// import { Stack } from 'expo-router/stack';
-// import { Drawer } from 'expo-router/drawer';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { Drawer } from '../../components/Drawer';
 import {
@@ -18,7 +16,7 @@ export const unstable_settings = {
 };
 
 function CustomDrawerContent(props: DrawerContentComponentProps) {
-  const session = useAuth();
+  const { user } = useAuth();
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -27,9 +25,7 @@ function CustomDrawerContent(props: DrawerContentComponentProps) {
   return (
     <DrawerContentScrollView {...props}>
       <View className='w-full h-[40px] bg-secondaryBackground mb-3 flex justify-center items-center'>
-        <Text className='text-secondaryText'>
-          {session.session?.user.email}
-        </Text>
+        <Text className='text-secondaryText'>{user?.email}</Text>
       </View>
       <DrawerItemList {...props} />
 
