@@ -1,4 +1,3 @@
-import { useNavigation } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { ScrollView, View } from 'react-native';
 import { Fragment, useState } from 'react';
@@ -6,55 +5,17 @@ import { Fragment, useState } from 'react';
 import { TextInput } from '~components/Input';
 import { GPTResponse, UserPrompt } from '~components/index';
 import { useAuth } from '~contexts/auth';
-import { generateGPTResponse, generateTitle } from '~utils/openai';
-
-type ConversationList = {
-  prompt: string;
-  response?: string;
-};
+import { useAskGPT } from '~hooks/useAskGPT';
 
 export default function HomeScreen() {
-  const navigation = useNavigation();
   const { user } = useAuth();
 
-  const [prompt, setPrompt] = useState('');
-  const [titleChanged, setTitleChanged] = useState(false);
   const [defaultBottomPadding, setDefaultBottomPadding] = useState(0);
-  const [conversationList, setConversationList] = useState<ConversationList[]>(
-    []
+
+  const { conversationList, prompt, setPrompt, handleSendMessage } = useAskGPT(
+    'old',
+    5
   );
-
-  const handleMessage = async () => {
-    const newConversationList = [
-      ...conversationList,
-      {
-        prompt,
-      },
-    ];
-    setConversationList(newConversationList);
-    setPrompt('');
-
-    const gptResponse = await generateGPTResponse(prompt);
-
-    if (gptResponse) {
-      const newConversationListWithResponse = [
-        ...newConversationList.slice(0, -1),
-        {
-          prompt,
-          response: gptResponse,
-        },
-      ];
-      setConversationList(newConversationListWithResponse);
-
-      if (!titleChanged) {
-        const title = await generateTitle(prompt);
-        navigation.setOptions({
-          headerTitle: title,
-        });
-        setTitleChanged(true);
-      }
-    }
-  };
 
   return (
     <View className='relative flex items-center justify-center flex-1 w-screen h-full bg-primaryBackground'>
@@ -88,7 +49,7 @@ export default function HomeScreen() {
             numberOfLines={4}
             iconName='send-sharp'
             showIcon
-            onIconPress={handleMessage}
+            onIconPress={handleSendMessage}
             onContentSizeChange={e => {
               setDefaultBottomPadding(e.nativeEvent.contentSize.height);
             }}

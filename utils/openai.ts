@@ -55,12 +55,12 @@ export const generateTitle = async (prompt: string) => {
 };
 
 export const generateGPTResponse = async (prompt: string) => {
-  const recentMessages = '';
+  const recentMessages = ''; // TODO: get recent messages from the user
   const gptResponse = await gptCreateChatCompletion({
     userPrompt: prompt,
-    systemContent: `Respond to the user's messages as best, accurately, convincingly, and as human-like as you can, keep it short and straight to the point. Maximum of 5 sentences. You can make it long if the users asks for it. You can also add bullets and numbers in a list in addition to the 5 sentences, but add them only if the user asks for it.${
+    systemContent: `Respond to the user's messages as best, accurately, convincingly, and as human-like as you can, keep it short and straight to the point. Maximum of 5 sentences. You can make it long if the users asks for it. You can also add bullets and numbers in a list in addition to the 5 sentences, but add them only if the user asks for it. You can try to be funny sometimes.${
       recentMessages
-        ? ` Also, you can try to make your answer based on the user's recent messages and your response (as an assistant) to those recent messages (conversation history), if they did not get the answer they want and they ask again. Here are the 20 recent messages of the user, the most recent is always number 1:\n\n${recentMessages}`
+        ? ` Also, you can try to make your answer based on the user's recent messages and your response (as an assistant) to those recent messages (conversation history), if they did not get the answer they want and they ask again. Here are the recent messages of the user, the most recent is always number 1:\n\n${recentMessages}`
         : ''
     }`,
   });
