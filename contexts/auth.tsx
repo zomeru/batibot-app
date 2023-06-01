@@ -1,60 +1,74 @@
-import { useRouter, useSegments } from 'expo-router';
-import React from 'react';
+import React, { createContext, useMemo, useEffect } from 'react';
+import { Session } from '@supabase/supabase-js';
+import { useSegments } from 'expo-router/src/LocationProvider';
+import { useRouter } from 'expo-router';
 
-type User = {
-  name: string;
+import { supabase } from '../utils/supabase';
+
+type ContextProps = {
+  session: Session | null;
 };
 
-interface UserContextProps {
-  user: User;
-  signIn: () => void;
-  signOut: () => void;
-}
+const AuthContext = createContext<Partial<ContextProps>>({});
 
-const AuthContext = React.createContext<UserContextProps>(
-  null as unknown as UserContextProps
-);
-
-// This hook can be used to access the user info.
 export function useAuth() {
   return React.useContext(AuthContext);
 }
 
 // This hook will protect the route access based on user authentication.
-function useProtectedRoute(user: User) {
+function useProtectedRoute(session: Session | null, userLoading: boolean) {
   const segments = useSegments();
   const router = useRouter();
 
   React.useEffect(() => {
     const inAuthGroup = segments[0] === '(auth)';
 
+    console.log({
+      segment: segments[0],
+    });
+
     if (
       // If the user is not signed in and the initial segment is not anything in the auth group.
-      !user &&
+      !session &&
       !inAuthGroup
     ) {
       // Redirect to the sign-in page.
-      router.replace('/sign-in');
-    } else if (user && inAuthGroup) {
+      router.replace('/(auth)/sign-in');
+    } else if (session && inAuthGroup) {
       // Redirect away from the sign-in page.
-      router.replace('/');
+      router.replace('/home');
     }
-  }, [user, segments]);
+  }, [session, segments]);
 }
 
 export default function Provider({ children }: { children: React.ReactNode }) {
-  const [user, setAuth] = React.useState<User>(null as unknown as User);
+  const [session, setSession] = React.useState<Session | null>(null);
+  const [loading, setLoading] = React.useState(true);
 
-  useProtectedRoute(user);
+  useProtectedRoute(session, loading);
 
-  const value = React.useMemo(
-    () => ({
-      user,
-      signIn: () => setAuth({ name: 'Zoms' }),
-      signOut: () => setAuth(null as unknown as User),
-    }),
-    [user]
-  );
+  useEffect(() => {
+    async function getSession() {
+      const { data } = await supabase.auth.getSession();
+      const newSession = data?.session;
+      setSession(newSession);
+    }
+
+    getSession().catch(console.error);
+
+    const { data: authData } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        console.log(event, session);
+        setSession(session);
+      }
+    );
+
+    return () => {
+      authData?.subscription?.unsubscribe();
+    };
+  }, []);
+
+  const value = useMemo(() => ({ session }), [session]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

@@ -1,9 +1,9 @@
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-
-import { useFonts } from 'expo-font';
-import { SplashScreen, Slot } from 'expo-router';
+import 'react-native-url-polyfill/auto';
 import { useEffect } from 'react';
-import { HOME_SCREEN } from '../constants/Screens';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { useFonts } from 'expo-font';
+import Toast from 'react-native-toast-message';
+import { SplashScreen, Stack, usePathname } from 'expo-router';
 import { AuthProvider } from '../contexts';
 
 export {
@@ -13,7 +13,7 @@ export {
 
 export const unstable_settings = {
   // Ensure that reloading on `/modal` keeps a back button present.
-  initialRouteName: HOME_SCREEN,
+  initialRouteName: '(home)',
 };
 
 export default function RootLayout() {
@@ -29,7 +29,6 @@ export default function RootLayout() {
 
   return (
     <>
-      {/* Keep the splash screen open until the assets have loaded. In the future, we should just support async font loading with a native version of font-display. */}
       {!loaded && <SplashScreen />}
       {loaded && <RootLayoutNav />}
     </>
@@ -37,13 +36,25 @@ export default function RootLayout() {
 }
 
 function RootLayoutNav() {
-  const isLoggedIn = false;
+  const pathname = usePathname();
+
+  console.log({
+    pathname,
+  });
 
   return (
-    <>
-      <AuthProvider>
-        <Slot />
-      </AuthProvider>
-    </>
+    <AuthProvider>
+      <Stack
+        initialRouteName='(home)'
+        screenOptions={{
+          headerShown: false,
+        }}
+      >
+        <Stack.Screen name='(home)' />
+        <Stack.Screen name='(auth)' />
+        <Stack.Screen name='modal' />
+      </Stack>
+      <Toast />
+    </AuthProvider>
   );
 }

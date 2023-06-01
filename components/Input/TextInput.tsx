@@ -12,6 +12,7 @@ interface TextInputComponentProps {
   value?: string;
   setValue?: React.Dispatch<React.SetStateAction<string>>;
   className?: string;
+  secure?: boolean;
 }
 
 export default function TextInputComponent({
@@ -24,6 +25,7 @@ export default function TextInputComponent({
   value,
   setValue,
   className,
+  secure = false,
 }: TextInputComponentProps) {
   return (
     <View
@@ -32,7 +34,7 @@ export default function TextInputComponent({
       }`}
     >
       <TextInput
-        secureTextEntry={iconName === 'eye-off-outline'}
+        secureTextEntry={iconName === 'eye-off-outline' || secure}
         className='flex flex-1 py-4 text-primaryBackground bg-primaryText'
         value={value}
         placeholderTextColor='#292b37'

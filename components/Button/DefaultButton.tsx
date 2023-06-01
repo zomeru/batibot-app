@@ -20,7 +20,7 @@ export default function DefaultButton({
         end={{ x: 0.9, y: 1 }}
         className='rounded-sm'
       >
-        <Text className='text-white font-medium text-base text-center py-3 text-primaryBackground'>
+        <Text className='py-3 text-base font-medium text-center text-white text-primaryBackground'>
           {title}
         </Text>
       </LinearGradient>
