@@ -80,6 +80,9 @@ dependencies:
   react-native-gesture-handler:
     specifier: ~2.9.0
     version: 2.9.0(react-native@0.71.8)(react@18.2.0)
+  react-native-linear-gradient:
+    specifier: ^2.6.2
+    version: 2.6.2(react-native@0.71.8)(react@18.2.0)
   react-native-reanimated:
     specifier: ^2.14.4
     version: 2.14.4(@babel/core@7.20.2)(react-native@0.71.8)(react@18.2.0)
@@ -8224,6 +8227,16 @@ packages:
 
   /react-native-gradle-plugin@0.71.18:
     resolution: {integrity: sha512-7F6bD7B8Xsn3JllxcwHhFcsl9aHIig47+3eN4IHFNqfLhZr++3ElDrcqfMzugM+niWbaMi7bJ0kAkAL8eCpdWg==}
+    dev: false
+
+  /react-native-linear-gradient@2.6.2(react-native@0.71.8)(react@18.2.0):
+    resolution: {integrity: sha512-Z8Xxvupsex+9BBFoSYS87bilNPWcRfRsGC0cpJk72Nxb5p2nEkGSBv73xZbEHnW2mUFvP+huYxrVvjZkr/gRjQ==}
+    peerDependencies:
+      react: '*'
+      react-native: '*'
+    dependencies:
+      react: 18.2.0
+      react-native: 0.71.8(@babel/core@7.20.2)(@babel/preset-env@7.22.4)(react@18.2.0)
     dev: false
 
   /react-native-ratings@8.0.4(react-native@0.71.8)(react@18.2.0):

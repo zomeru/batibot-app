@@ -106,12 +106,12 @@ export default function HomeLayoutNavigator() {
         }}
       />
       <Drawer.Screen
-        name='settings'
+        name='about'
         options={{
-          title: 'Settings',
-          headerTitle: 'Settings',
+          title: 'About',
+          headerTitle: 'About',
           drawerIcon: ({ color, size }) => (
-            <Feather name='settings' size={size} color={color} />
+            <Feather name='info' size={size} color={color} />
           ),
         }}
       />

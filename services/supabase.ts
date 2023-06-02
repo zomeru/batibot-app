@@ -39,10 +39,24 @@ export const getConversation = async (
   return [data as ConversationData, error];
 };
 
+export const getUserConversations = async (
+  email: string,
+  limit: number = 20
+) => {
+  const { data, error } = await supabase
+    .from('conversations')
+    .select('id, title, created_at')
+    .eq('user', email)
+    .order('created_at', { ascending: false })
+    .limit(limit);
+
+  return [data, error];
+};
+
 export const getConversationMessages = async (conversationId: number) => {
   const { data, error } = await supabase
     .from('messages')
-    .select('prompt,response')
+    .select('prompt,response,id')
     .eq('conversation_id', conversationId)
     .order('created_at', { ascending: true });
 
@@ -80,14 +94,17 @@ export const createMessage = async ({
   conversationId,
   user,
 }: CreateMessageParams) => {
-  const { data, error } = await supabase.from('messages').insert([
-    {
-      prompt,
-      response,
-      conversation_id: conversationId,
-      user,
-    },
-  ]);
+  const { data, error } = await supabase
+    .from('messages')
+    .insert([
+      {
+        prompt,
+        response,
+        conversation_id: conversationId,
+        user,
+      },
+    ])
+    .select('id, prompt, response, conversation_id, user');
 
   return [data, error];
 };

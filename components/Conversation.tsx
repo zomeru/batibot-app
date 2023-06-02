@@ -5,7 +5,7 @@ import { Fragment, useState } from 'react';
 import { TextInput } from '~components/Input';
 import { useAuth } from '~contexts/auth';
 import { type ConversationList } from '~hooks/index';
-import GPTResponse from './GPTResponse';
+import GPTResponse, { type ConversationType } from './GPTResponse';
 import UserPrompt from './UserPrompt';
 
 interface ConversationProps {
@@ -13,6 +13,8 @@ interface ConversationProps {
   prompt: string;
   setPrompt: React.Dispatch<React.SetStateAction<string>>;
   handleSendMessage: () => Promise<void>;
+  originalConversationLength?: number;
+  type?: ConversationType;
 }
 
 function Conversation({
@@ -20,6 +22,8 @@ function Conversation({
   prompt,
   setPrompt,
   handleSendMessage,
+  type = 'new',
+  originalConversationLength,
 }: ConversationProps) {
   const { user } = useAuth();
 
@@ -33,17 +37,27 @@ function Conversation({
           style={{
             paddingBottom: 78 + defaultBottomPadding,
           }}
-          className={`h-auto`}
+          className={`h-full`}
         >
           {conversationList.length > 0 ? (
             <ScrollView>
               {conversationList.map((convo, i) => (
-                <Fragment key={i}>
+                <Fragment key={convo.id}>
                   <UserPrompt
                     imageUrl={user?.user_metadata.avatar_url}
                     prompt={convo.prompt}
                   />
-                  {convo.response && <GPTResponse response={convo.response} />}
+                  {convo.response && (
+                    <GPTResponse
+                      type={
+                        originalConversationLength &&
+                        originalConversationLength < i + 1
+                          ? 'new'
+                          : type
+                      }
+                      response={convo.response}
+                    />
+                  )}
                 </Fragment>
               ))}
             </ScrollView>

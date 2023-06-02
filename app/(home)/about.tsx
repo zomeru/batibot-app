@@ -4,20 +4,35 @@ import { Text, View } from 'react-native';
 import { DrawerActions } from '@react-navigation/native';
 
 import { DefaultButton } from '~components/Button';
+import { supabase } from '~utils/supabase';
 
 export default function SettingsScreen() {
   const navigation = useNavigation();
+
+  const handleDeleteMessages = async () => {
+    const { data, error } = await supabase
+      .from('messages')
+      .delete()
+      .eq('user', 'zomerzxc.19@gmail.com');
+  };
+
+  const handleDeleteConversations = async () => {
+    const { data, error } = await supabase
+      .from('conversations')
+      .delete()
+      .eq('user', 'zomerzxc.19@gmail.com');
+  };
 
   return (
     <View className='flex items-center justify-center flex-1 w-screen h-screen px-10 bg-primaryBackground'>
       <StatusBar style='light' />
       <Text className='text-primaryText'>SETTINGS</Text>
 
+      <DefaultButton title='Delete messages' onPress={handleDeleteMessages} />
+
       <DefaultButton
-        title='Drawer'
-        onPress={() => {
-          navigation.dispatch(DrawerActions.toggleDrawer());
-        }}
+        title='Delete conversations'
+        onPress={handleDeleteConversations}
       />
     </View>
   );

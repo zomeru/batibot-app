@@ -1,25 +1,38 @@
 import { useNavigation, useLocalSearchParams } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import { Text, View } from 'react-native';
-import { DrawerActions } from '@react-navigation/native';
 
-import { DefaultButton } from '~components/Button';
+import { useGPT } from '~hooks/useGPT';
+import Conversation from '~components/Conversation';
+import { View } from 'react-native';
+import MessagesLoader from '~components/MessagesLoader';
 
 export default function ConversationScreen() {
-  const navigation = useNavigation();
   const searchParams = useLocalSearchParams();
 
-  return (
-    <View className='flex items-center justify-center flex-1 w-screen h-screen px-10 bg-primaryBackground'>
-      <StatusBar style='light' />
-      <Text className='text-primaryText'>Dynamic Conversation</Text>
+  const {
+    conversationList,
+    prompt,
+    setPrompt,
+    handleSendMessage,
+    loading,
+    originalConversationLength,
+  } = useGPT('old', Number(searchParams.conversationId));
 
-      <DefaultButton
-        title='Drawer'
-        onPress={() => {
-          navigation.dispatch(DrawerActions.toggleDrawer());
-        }}
-      />
-    </View>
+  return (
+    <>
+      {loading ? (
+        <View className='flex items-center justify-center flex-1 w-screen h-full bg-primaryBackground'>
+          <MessagesLoader />
+        </View>
+      ) : (
+        <Conversation
+          conversationList={conversationList}
+          prompt={prompt}
+          setPrompt={setPrompt}
+          handleSendMessage={handleSendMessage}
+          type='old'
+          originalConversationLength={originalConversationLength}
+        />
+      )}
+    </>
   );
 }

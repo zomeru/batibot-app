@@ -1,5 +1,6 @@
-import { useNavigation } from 'expo-router';
+import { useNavigation, useSegments } from 'expo-router';
 import { useEffect, useState } from 'react';
+import Toast from 'react-native-toast-message';
 
 import { useAuth } from '~contexts/auth';
 import {
@@ -11,6 +12,7 @@ import {
 import { generateGPTResponse, generateTitle } from '~utils/openai';
 
 export type ConversationList = {
+  id: number;
   prompt: string;
   response?: string;
 };
@@ -19,18 +21,29 @@ export const useGPT = (type: 'new' | 'old', conversationId?: number) => {
   const navigation = useNavigation();
   const { user } = useAuth();
 
+  const segments = useSegments();
+
+  console.log({
+    SEGMENTS: segments,
+  });
+
   const [newConversationId, setNewConversationId] = useState<number | null>();
   const [prompt, setPrompt] = useState('');
   const [titleChanged, setTitleChanged] = useState(false);
   const [conversationList, setConversationList] = useState<ConversationList[]>(
     []
   );
+  const [loading, setLoading] = useState(true);
+  const [originalConversationLength, setOriginalConversationLength] =
+    useState(0);
 
   useEffect(() => {
-    if (type === 'new') return;
+    if (type === 'new' || !conversationId) return;
+    let timer: NodeJS.Timeout;
 
     const fetchRecentPrompts = async () => {
-      const [conversation] = await getConversation(conversationId!);
+      setLoading(true);
+      const [conversation] = await getConversation(conversationId);
 
       if (conversation) {
         navigation.setOptions({ headerTitle: conversation.title });
@@ -39,36 +52,68 @@ export const useGPT = (type: 'new' | 'old', conversationId?: number) => {
 
       const [messages] = await getConversationMessages(conversationId!);
 
-      if (!messages) return;
+      if (!messages) {
+        Toast.show({
+          type: 'error',
+          text1: 'Something went wrong fetching your conversation.',
+        });
+        return;
+      }
 
       setConversationList(messages as ConversationList[]);
+      setOriginalConversationLength((messages as ConversationList[]).length);
+      timer = setTimeout(() => {
+        setLoading(false);
+      }, 500);
     };
 
     fetchRecentPrompts().catch(error => {
       console.error(error);
     });
-  }, []);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [conversationId]);
 
   const handleSendMessage = async () => {
     const newConversationList = [
       ...conversationList,
       {
+        id: conversationList.length + 1,
         prompt,
       },
     ];
     setConversationList(newConversationList);
     setPrompt('');
 
-    const gptResponse = await generateGPTResponse(prompt);
+    const formattedRecentMessages = [...conversationList]
+      .reverse()
+      .map((recent, i) => {
+        return `${i + 1}\n User prompt: ${
+          recent.prompt
+        }\n Assistant response: ${recent.response}\n`;
+      })
+      .join('\n');
+
+    const gptResponse = await generateGPTResponse(
+      prompt,
+      formattedRecentMessages
+    );
 
     if (gptResponse) {
-      const newConversationListWithResponse = [
-        ...newConversationList.slice(0, -1),
-        {
-          prompt,
-          response: gptResponse,
-        },
-      ];
+      const newConversationListWithResponse = newConversationList.map(
+        (conversation, index) => {
+          if (index === newConversationList.length - 1) {
+            return {
+              ...conversation,
+              response: gptResponse,
+            };
+          }
+
+          return conversation;
+        }
+      );
       setConversationList(newConversationListWithResponse);
 
       if (!titleChanged) {
@@ -102,5 +147,7 @@ export const useGPT = (type: 'new' | 'old', conversationId?: number) => {
     prompt,
     setPrompt,
     handleSendMessage,
+    loading,
+    originalConversationLength,
   };
 };

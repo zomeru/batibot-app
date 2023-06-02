@@ -54,8 +54,10 @@ export const generateTitle = async (prompt: string) => {
   return generatedTitle;
 };
 
-export const generateGPTResponse = async (prompt: string) => {
-  const recentMessages = ''; // TODO: get recent messages from the user
+export const generateGPTResponse = async (
+  prompt: string,
+  recentMessages?: string
+) => {
   const gptResponse = await gptCreateChatCompletion({
     userPrompt: prompt,
     systemContent: `Respond to the user's messages as best, accurately, convincingly, and as human-like as you can, keep it short and straight to the point. Maximum of 5 sentences. You can make it long if the users asks for it. You can also add bullets and numbers in a list in addition to the 5 sentences, but add them only if the user asks for it. You can try to be funny sometimes.${
