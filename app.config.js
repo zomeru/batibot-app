@@ -33,6 +33,9 @@ module.exports = {
       supabaseServiceKey: process.env.SUPABASE_SERVICE_KEY,
       supabaseUrl: process.env.SUPABASE_URL,
       OPENAI_API_KEY: process.env.OPENAI_API_KEY,
+      eas: {
+        projectId: '2f8e7833-f390-48ac-bc07-63dbc0036437',
+      },
     },
   },
 };
