@@ -84,8 +84,8 @@ function JumpingDots({ dots = 3, bounceHeight = 4, components = null }) {
             key={`loading-anim-${index}`}
             style={[
               {
-                width: 5,
-                height: 5,
+                width: 3,
+                height: 3,
                 borderRadius: 100,
                 marginRight: 3,
               },

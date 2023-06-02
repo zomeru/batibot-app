@@ -24,7 +24,11 @@ export default function GPTResponse({
         }}
       />
       <View className='mt-1 mr-7'>
-        {gptTyping && !response && <JumpingDots />}
+        {gptTyping && !response && (
+          <View className='mt-1'>
+            <JumpingDots />
+          </View>
+        )}
         {response && (
           <>
             {type === 'new' ? (

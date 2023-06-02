@@ -45,9 +45,9 @@ export const getUserConversations = async (
 ) => {
   const { data, error } = await supabase
     .from('conversations')
-    .select('id, title, created_at')
+    .select('id, title, updated_at')
     .eq('user', email)
-    .order('created_at', { ascending: false })
+    .order('updated_at', { ascending: false })
     .limit(limit);
 
   return [data, error];
@@ -105,6 +105,22 @@ export const createMessage = async ({
       },
     ])
     .select('id, prompt, response, conversation_id, user');
+
+  return [data, error];
+};
+
+export const updateConversation = async ({
+  conversationId,
+  title,
+}: {
+  conversationId: number;
+  title: string;
+}) => {
+  const { data, error } = await supabase
+    .from('conversations')
+    .update({ title, updated_at: new Date() })
+    .eq('id', conversationId)
+    .select('id, title, updated_at');
 
   return [data, error];
 };

@@ -8,6 +8,7 @@ import {
   createMessage,
   getConversation,
   getConversationMessages,
+  updateConversation,
 } from '~services/supabase';
 import { generateGPTResponse, generateTitle } from '~utils/openai';
 
@@ -31,6 +32,7 @@ export const useGPT = (type: 'new' | 'old', conversationId?: number) => {
   const [gptTyping, setGptTyping] = useState(false);
   const [originalConversationLength, setOriginalConversationLength] =
     useState(0);
+  const [conversationTitle, setConversationTitle] = useState('');
 
   useEffect(() => {
     if (type === 'new' || !conversationId) return;
@@ -43,6 +45,7 @@ export const useGPT = (type: 'new' | 'old', conversationId?: number) => {
       if (conversation) {
         navigation.setOptions({ headerTitle: conversation.title });
         setTitleChanged(true);
+        setConversationTitle(conversation.title);
       }
 
       const [messages] = await getConversationMessages(conversationId!);
@@ -91,7 +94,6 @@ export const useGPT = (type: 'new' | 'old', conversationId?: number) => {
       })
       .join('\n');
 
-    console.log(formattedRecentMessages);
     const gptResponse = await generateGPTResponse(
       prompt,
       formattedRecentMessages
@@ -115,6 +117,7 @@ export const useGPT = (type: 'new' | 'old', conversationId?: number) => {
 
       if (!titleChanged) {
         const title = await generateTitle(prompt);
+        setConversationTitle(title);
         navigation.setOptions({
           headerTitle: title,
         });
@@ -129,6 +132,17 @@ export const useGPT = (type: 'new' | 'old', conversationId?: number) => {
           user: user?.email!,
         });
       } else {
+        // Update the title even if it's still the same, so that the updated_at field is updated
+        const [updated, errUpdate] = await updateConversation({
+          conversationId: newConversationId || conversationId!,
+          title: conversationTitle,
+        });
+
+        console.log({
+          updated,
+          errUpdate,
+        });
+
         await createMessage({
           prompt,
           response: gptResponse,

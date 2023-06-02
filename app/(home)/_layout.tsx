@@ -7,6 +7,7 @@ import {
 import { FontAwesome, Feather, AntDesign } from '@expo/vector-icons';
 import { useNavigation } from 'expo-router/src/useNavigation';
 import { DrawerActions } from '@react-navigation/native';
+import 'react-native-gesture-handler';
 
 import { supabase } from '~utils/supabase';
 import { useAuth } from '~contexts/auth';
