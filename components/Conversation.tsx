@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { Image, ScrollView, Text, View } from 'react-native';
-import { Fragment, useState } from 'react';
+import { Fragment, useRef, useState } from 'react';
 
 import { TextInput } from '~components/Input';
 import { useAuth } from '~contexts/auth';
@@ -29,6 +29,8 @@ function Conversation({
 }: ConversationProps) {
   const { user } = useAuth();
 
+  const scrollViewRef = useRef<ScrollView>(null);
+
   const [defaultBottomPadding, setDefaultBottomPadding] = useState(0);
 
   return (
@@ -42,7 +44,12 @@ function Conversation({
           className={`h-full`}
         >
           {conversationList.length > 0 ? (
-            <ScrollView>
+            <ScrollView
+              ref={scrollViewRef}
+              onContentSizeChange={() =>
+                scrollViewRef.current?.scrollToEnd({ animated: true })
+              }
+            >
               {conversationList.map((convo, i) => (
                 <Fragment key={convo.id}>
                   <UserPrompt
