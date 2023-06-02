@@ -1,5 +1,6 @@
-import { PostgrestError, SupabaseClient } from '@supabase/supabase-js';
+import { PostgrestError } from '@supabase/supabase-js';
 import { supabase } from '~utils/supabase';
+import Toast from 'react-native-toast-message';
 
 // TODO: ADD ERROR TOAST WHEN ONE OF THESE FAILS
 

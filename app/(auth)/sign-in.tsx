@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { Text, View } from 'react-native';
+import { Image, Text, TouchableOpacity, View } from 'react-native';
 import { Link } from 'expo-router';
+import Toast from 'react-native-toast-message';
 
-import { TextInput } from '~components/Input';
 import { DefaultButton, ProviderButton } from '~components/Button';
-
+import { TextInput } from '~components/Input';
 import { useAuthenticate } from '~hooks/useAuthenticate';
 import { oAuthLogin } from '~utils/supabase';
 
@@ -21,6 +21,12 @@ export default function SignInScreen() {
     <View className='flex items-center justify-center flex-1 w-screen h-screen px-8 bg-primaryBackground'>
       <StatusBar style='light' />
       <View className='w-full h-auto'>
+        <Image
+          className='w-16 h-16 mx-auto opacity-80'
+          source={{
+            uri: 'https://i.imgur.com/qZLxVqM.png',
+          }}
+        />
         <Text className='text-2xl font-bold text-center text-primaryText'>
           Welcome to Batibot!
         </Text>
@@ -41,6 +47,19 @@ export default function SignInScreen() {
           value={password}
           setValue={setPassword}
         />
+        <TouchableOpacity
+          className='mt-3 mb-1'
+          onPress={() => {
+            Toast.show({
+              type: 'info',
+              text1: 'Coming soon!',
+            });
+          }}
+        >
+          <Text className='text-sm font-medium text-right text-secondaryText'>
+            Forgot password?
+          </Text>
+        </TouchableOpacity>
         <DefaultButton
           loading={loading}
           disabled={loading}

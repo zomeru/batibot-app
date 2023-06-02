@@ -72,7 +72,7 @@ function Conversation({
           ) : (
             <View className='flex items-center justify-center h-full'>
               <Image
-                className='w-20 h-20 opacity-60'
+                className='w-20 h-20 opacity-80'
                 source={{
                   uri: 'https://i.imgur.com/qZLxVqM.png',
                 }}
