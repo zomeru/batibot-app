@@ -1,2 +1,3 @@
 export * from './useWarmUpBrowser';
-export * from './useAskGPT';
+export * from './useGPT';
+export * from './useAuthenticate';

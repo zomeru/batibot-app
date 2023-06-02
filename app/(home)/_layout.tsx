@@ -75,7 +75,6 @@ export default function HomeLayoutNavigator() {
           fontWeight: '400',
           fontSize: 16,
         },
-        headerTitle: 'New chat',
         drawerStyle: {
           backgroundColor: '#1a1e24',
         },
@@ -90,6 +89,7 @@ export default function HomeLayoutNavigator() {
         name='home'
         options={{
           title: 'Home',
+          headerTitle: 'New chat',
           drawerIcon: ({ color, size }) => (
             <FontAwesome name='home' size={size} color={color} />
           ),
@@ -98,7 +98,8 @@ export default function HomeLayoutNavigator() {
       <Drawer.Screen
         name='conversations'
         options={{
-          title: 'Conversations',
+          title: 'Conversation History',
+          headerTitle: 'History',
           drawerIcon: ({ color, size }) => (
             <Feather name='message-square' size={size} color={color} />
           ),
@@ -108,6 +109,7 @@ export default function HomeLayoutNavigator() {
         name='settings'
         options={{
           title: 'Settings',
+          headerTitle: 'Settings',
           drawerIcon: ({ color, size }) => (
             <Feather name='settings' size={size} color={color} />
           ),
@@ -116,6 +118,7 @@ export default function HomeLayoutNavigator() {
       <Drawer.Screen
         name='[conversation]'
         options={{
+          headerTitle: '',
           drawerItemStyle: {
             display: 'none',
           },

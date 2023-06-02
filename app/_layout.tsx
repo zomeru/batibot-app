@@ -2,7 +2,10 @@ import 'react-native-url-polyfill/auto';
 import { useEffect } from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { useFonts } from 'expo-font';
-import Toast from 'react-native-toast-message';
+import Toast, {
+  ToastConfig,
+  ToastConfigParams,
+} from 'react-native-toast-message';
 import { SplashScreen, Stack } from 'expo-router';
 import { Buffer } from 'buffer';
 
@@ -40,26 +43,27 @@ export default function RootLayout() {
   );
 }
 
+const ToastConfigs: ToastConfig = {
+  success: (props: ToastConfigParams<any>) => <CustomToast {...props} />,
+  error: (props: ToastConfigParams<any>) => <CustomToast {...props} />,
+  info: (props: ToastConfigParams<any>) => <CustomToast {...props} />,
+  warning: (props: ToastConfigParams<any>) => <CustomToast {...props} />,
+};
+
 function RootLayoutNav() {
   return (
     <AuthProvider>
       <Stack
-        initialRouteName='(home)'
+        initialRouteName='index'
         screenOptions={{
           headerShown: false,
         }}
       >
+        <Stack.Screen name='index' />
         <Stack.Screen name='(home)' />
         <Stack.Screen name='(auth)' />
       </Stack>
-      <Toast
-        config={{
-          success: props => <CustomToast {...props} />,
-          error: props => <CustomToast {...props} />,
-          info: props => <CustomToast {...props} />,
-          warning: props => <CustomToast {...props} />,
-        }}
-      />
+      <Toast config={ToastConfigs} />
     </AuthProvider>
   );
 }

@@ -2,11 +2,11 @@ import { useState } from 'react';
 import { useLocalSearchParams, useNavigation } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { Text, View, TouchableOpacity, ActivityIndicator } from 'react-native';
-import Toast from 'react-native-toast-message';
 
-import { handleSupabaseResendOTP, supabase } from '~utils/supabase';
+import { handleSupabaseResendOTP } from '~utils/supabase';
 import { DefaultButton } from '~components/Button';
 import { TextInput } from '~components/Input';
+import { useAuthenticate } from '~hooks/useAuthenticate';
 
 export default function VerifyEmailScreen() {
   const searchParams = useLocalSearchParams();
@@ -16,39 +16,7 @@ export default function VerifyEmailScreen() {
   const [loading, setLoading] = useState(false);
   const [otpSending, setOtpSending] = useState(false);
 
-  const handleVerifyEmail = async () => {
-    if (!code) {
-      Toast.show({
-        type: 'warning',
-        text1: 'Please enter the code we sent you.',
-      });
-      return;
-    }
-
-    setLoading(true);
-
-    const { data, error } = await supabase.auth.verifyOtp({
-      token: code.trim(),
-      type: 'signup',
-      email: searchParams.email as string,
-    });
-
-    if (error) {
-      Toast.show({
-        type: 'error',
-        text1: error.message,
-      });
-    }
-
-    if (data) {
-      Toast.show({
-        type: 'success',
-        text1: 'Email verified!',
-      });
-    }
-
-    setLoading(false);
-  };
+  const { handleVerifyEmail } = useAuthenticate();
 
   const handleResendOTP = async () => {
     await handleSupabaseResendOTP(searchParams.email as string, setOtpSending);
@@ -79,7 +47,13 @@ export default function VerifyEmailScreen() {
         }}
       />
       <DefaultButton
-        onPress={handleVerifyEmail}
+        onPress={async () =>
+          await handleVerifyEmail({
+            code,
+            setLoading,
+            email: searchParams.email as string,
+          })
+        }
         title='Verify'
         loading={loading}
         disabled={loading}

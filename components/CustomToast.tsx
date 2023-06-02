@@ -8,12 +8,12 @@ export default function CustomToast(props: ToastConfigParams<ToastConfig>) {
   return (
     <View
       className={`flex flex-1 w-full h-[120px] bg-[#3eb6d12f] -translate-y-[50px] justify-end items-center py-1 ${
-        text2 ? 'h-[130px]' : 'h-[110px]'
+        text1 && text2 ? 'h-[130px]' : 'h-[110px]'
       }`}
     >
       {type === 'success' ? (
         <AntDesign
-          className='text-primaryText mb-[5px]'
+          className='mb-[5px]'
           name='checkcircleo'
           size={20}
           color='#78d3af'
@@ -27,14 +27,14 @@ export default function CustomToast(props: ToastConfigParams<ToastConfig>) {
         />
       ) : type === 'warning' ? (
         <AntDesign
-          className='text-primaryText'
+          className='mb-[5px]'
           name='warning'
           size={20}
           color='#ffaf40'
         />
       ) : (
         <AntDesign
-          className='text-primaryText'
+          className='mb-[5px]'
           name='infocirlceo'
           size={20}
           color='#3eb7d1'

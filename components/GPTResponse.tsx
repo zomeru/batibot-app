@@ -12,7 +12,7 @@ export default function GPTResponse({ response, type }: UserPromptProps) {
       <Image
         className='w-7 h-7'
         source={{
-          uri: 'https://i.imgur.com/5UUsyq8.png',
+          uri: 'https://i.imgur.com/qZLxVqM.png',
         }}
       />
       <View className='mt-1 mr-7'>

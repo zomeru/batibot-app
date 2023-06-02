@@ -10,12 +10,12 @@ import {
 } from '~services/supabase';
 import { generateGPTResponse, generateTitle } from '~utils/openai';
 
-type ConversationList = {
+export type ConversationList = {
   prompt: string;
   response?: string;
 };
 
-export const useAskGPT = (type: 'new' | 'old', conversationId?: number) => {
+export const useGPT = (type: 'new' | 'old', conversationId?: number) => {
   const navigation = useNavigation();
   const { user } = useAuth();
 

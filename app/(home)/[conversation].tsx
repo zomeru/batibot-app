@@ -9,10 +9,6 @@ export default function ConversationScreen() {
   const navigation = useNavigation();
   const searchParams = useLocalSearchParams();
 
-  console.log({
-    searchParams,
-  });
-
   return (
     <View className='flex items-center justify-center flex-1 w-screen h-screen px-10 bg-primaryBackground'>
       <StatusBar style='light' />

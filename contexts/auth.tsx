@@ -5,6 +5,7 @@ import { useRouter } from 'expo-router';
 
 import { supabase } from '~utils/supabase';
 import { findOrCreateUser } from '~services/supabase';
+import { set } from 'react-native-reanimated';
 
 type UserContextProps = {
   user?: User;
@@ -19,34 +20,41 @@ export function useAuth() {
 }
 
 // This hook will protect the route access based on user authentication.
-function useProtectedRoute(user?: User) {
+function useProtectedRoute(user?: User, loading?: boolean) {
   const segments = useSegments();
   const router = useRouter();
 
   React.useEffect(() => {
-    const inAuthGroup = segments[0] === '(auth)';
+    const signedIn =
+      user && (segments[0] === '(auth)' || segments.length === 0);
 
-    if (
-      // If the user is not signed in and the initial segment is not anything in the auth group.
-      !user &&
-      !inAuthGroup
-    ) {
+    const notSignedIn =
+      !user && !(segments[0] === '(auth)' || segments[0] !== undefined);
+
+    if (loading) {
+      router.replace('/');
+      return;
+    }
+
+    if (notSignedIn) {
       // Redirect to the sign-in page.
       router.replace('/(auth)/sign-in');
-    } else if (user && inAuthGroup) {
+    } else if (signedIn) {
       // Redirect away from the sign-in page.
       router.replace('/home');
     }
-  }, [user, segments]);
+  }, [user, segments, loading]);
 }
 
 export default function Provider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = React.useState<User | undefined>();
+  const [loading, setLoading] = React.useState(true);
 
-  useProtectedRoute(user);
+  useProtectedRoute(user, loading);
 
   useEffect(() => {
     async function getSession() {
+      setLoading(true);
       const { data } = await supabase.auth.getSession();
       const currentUser = data?.session?.user;
       console.log('currentUser ID', currentUser?.id);
@@ -54,20 +62,24 @@ export default function Provider({ children }: { children: React.ReactNode }) {
       if (currentUser) {
         await findOrCreateUser(currentUser.email!, currentUser.id);
       }
+      setLoading(false);
     }
 
-    getSession().catch(console.error);
+    if (!user) {
+      getSession().catch(console.error);
+    }
 
     const { data: authData } = supabase.auth.onAuthStateChange(
       async (event, session) => {
-        console.log(event, session?.user?.email);
-        console.log('identities', session?.user?.user_metadata);
+        setLoading(true);
+        console.log('event', event);
         const user = session?.user ?? undefined;
         setUser(user);
         console.log('New user ID', user?.id);
         if (user) {
           await findOrCreateUser(user.email!, user.id);
         }
+        setLoading(false);
       }
     );
 

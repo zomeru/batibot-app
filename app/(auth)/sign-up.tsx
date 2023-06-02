@@ -1,18 +1,14 @@
 import { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { Text, View } from 'react-native';
-import { Link, useRouter } from 'expo-router';
-import Toast from 'react-native-toast-message';
+import { Link } from 'expo-router';
 
 import { TextInput } from '~components/Input';
 import { DefaultButton, ProviderButton } from '~components/Button';
-import { oAuthLogin, supabase } from '~utils/supabase';
-import { validateEmail } from '~utils/other';
-import { findOrCreateUser } from '~services/supabase';
+import { oAuthLogin } from '~utils/supabase';
+import { useAuthenticate } from '~hooks/useAuthenticate';
 
 export default function SignUpScreen() {
-  const router = useRouter();
-
   const [seePassword, setSeePassword] = useState(false);
   const [seeConfirmPassword, setSeeConfirmPassword] = useState(false);
   const [password, setPassword] = useState('');
@@ -20,67 +16,7 @@ export default function SignUpScreen() {
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleSignUp = async () => {
-    const lowerCaseEmail = email.toLowerCase().trim();
-
-    if (!lowerCaseEmail || !password || !confirmPassword) {
-      Toast.show({
-        type: 'warning',
-        text1: 'All fields are required.',
-      });
-      return;
-    }
-
-    if (!validateEmail(lowerCaseEmail)) {
-      Toast.show({
-        type: 'warning',
-        text1: 'Invalid email.',
-      });
-      return;
-    }
-
-    if (password !== confirmPassword) {
-      Toast.show({
-        type: 'warning',
-        text1: 'Passwords do not match.',
-      });
-      return;
-    }
-    setLoading(true);
-
-    let { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-    });
-
-    if (error) {
-      Toast.show({
-        type: 'error',
-        text1: error.message,
-      });
-      setLoading(false);
-      return;
-    }
-
-    if (data) {
-      const [user] = await findOrCreateUser(lowerCaseEmail, data?.user?.id!);
-
-      if (user) {
-        Toast.show({
-          type: 'error',
-          text1: 'Email already exists.',
-        });
-      } else {
-        router.push({
-          pathname: '/verify',
-          params: {
-            email: data.user?.email,
-          },
-        });
-      }
-    }
-    setLoading(false);
-  };
+  const { handleSignUp } = useAuthenticate();
 
   return (
     <View className='flex items-center justify-center flex-1 w-screen h-screen px-8 bg-primaryBackground'>
@@ -120,7 +56,14 @@ export default function SignUpScreen() {
           disabled={loading}
           title='Sign up'
           className='mt-3'
-          onPress={handleSignUp}
+          onPress={async () =>
+            await handleSignUp({
+              email,
+              password,
+              confirmPassword,
+              setLoading,
+            })
+          }
         />
         <Text className='my-5 text-sm font-medium text-center text-secondaryText'>
           Already have an account?{' '}
