@@ -92,12 +92,15 @@ function Conversation({
           <View className='h-[2px] w-full bg-secondaryBackground mb-2' />
           <TextInput
             placeholder='Type a message...'
-            className='mx-4'
+            className='h-auto mx-4'
             multiline
-            numberOfLines={4}
             iconName='send-sharp'
             showIcon
-            onIconPress={handleSendMessage}
+            onIconPress={() => {
+              if (!gptTyping && prompt.length > 0) {
+                handleSendMessage();
+              }
+            }}
             onContentSizeChange={e => {
               setDefaultBottomPadding(e.nativeEvent.contentSize.height);
             }}

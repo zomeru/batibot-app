@@ -12,11 +12,6 @@ import {
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { NativeSyntheticEvent } from 'react-native';
 import Toast from 'react-native-toast-message';
-import {
-  TapGestureHandler,
-  RotationGestureHandler,
-  GestureDetector,
-} from 'react-native-gesture-handler';
 
 import { DefaultButton } from '~components/Button';
 import { getUserConversations } from '~services/supabase';

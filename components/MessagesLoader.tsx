@@ -1,6 +1,8 @@
-import { View } from 'react-native';
+import { View, Platform } from 'react-native';
 import React from 'react';
 import SkeletonLoader from './SkeletonLoader';
+
+const isAndroid = Platform.OS === 'android';
 
 const MessagesLoader = () => {
   return (
@@ -20,14 +22,14 @@ const MessagesLoader = () => {
               <View className='mt-2 space-y-2'>
                 <SkeletonLoader
                   height={15}
-                  width={310}
+                  width={isAndroid ? 330 : 310}
                   style={{
                     borderRadius: 4,
                   }}
                 />
                 <SkeletonLoader
                   height={15}
-                  width={310}
+                  width={isAndroid ? 330 : 310}
                   style={{
                     borderRadius: 4,
                   }}

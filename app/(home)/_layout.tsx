@@ -1,4 +1,4 @@
-import { Text, TouchableOpacity, View } from 'react-native';
+import { Text, TouchableOpacity, View, Platform } from 'react-native';
 import {
   DrawerContentComponentProps,
   DrawerContentScrollView,
@@ -18,6 +18,8 @@ export const unstable_settings = {
   initialRouteName: 'home',
 };
 
+const isAndroid = Platform.OS === 'android';
+
 function CustomDrawerContent(props: DrawerContentComponentProps) {
   const { user } = useAuth();
 
@@ -26,15 +28,33 @@ function CustomDrawerContent(props: DrawerContentComponentProps) {
   };
 
   return (
-    <DrawerContentScrollView {...props}>
-      <View className='w-full h-[40px] bg-secondaryBackground mb-3 flex justify-center items-center'>
-        <Text className='text-secondaryText'>{user?.email}</Text>
+    <DrawerContentScrollView
+      {...props}
+      contentContainerStyle={{
+        justifyContent: 'space-between',
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100%',
+      }}
+    >
+      <View>
+        <View
+          className={`w-full h-[40px] bg-secondaryBackground mb-3 flex justify-center items-center ${
+            isAndroid ? 'mt-5' : ''
+          }`}
+        >
+          <Text className='text-secondaryText'>{user?.email}</Text>
+        </View>
+        <DrawerItemList {...props} />
       </View>
-      <DrawerItemList {...props} />
 
-      <View className='w-[90%] flex justify-end items-start mx-auto h-[500px]'>
+      <View
+        className={`w-[90%] flex justify-end items-start mx-auto ${
+          isAndroid ? 'mb-10' : 'mb-16'
+        }`}
+      >
         <TouchableOpacity
-          className='flex flex-row items-center w-full px-1 py-2'
+          className='flex flex-row items-center w-full px-1 py-3'
           onPress={handleLogout}
         >
           <AntDesign name='logout' size={22} color='#5e6980' />
@@ -69,6 +89,7 @@ export default function HomeLayoutNavigator() {
         headerStyle: {
           backgroundColor: '#1a1e24',
         },
+        headerTitleAlign: 'center',
         headerLeft: MenuIcon,
         headerTintColor: '#3eb7d1',
         headerShadowVisible: false,

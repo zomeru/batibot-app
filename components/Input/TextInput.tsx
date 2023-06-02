@@ -6,7 +6,6 @@ import {
   TextInputContentSizeChangeEventData,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useState } from 'react';
 
 interface TextInputComponentProps {
   showIcon?: boolean;
@@ -59,6 +58,7 @@ export default function TextInputComponent({
       }`}
     >
       <TextInput
+        style={{}}
         multiline={multiline}
         numberOfLines={numberOfLines}
         maxLength={maxLength}

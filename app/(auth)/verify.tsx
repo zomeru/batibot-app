@@ -66,14 +66,6 @@ export default function VerifyEmailScreen() {
           <Text className='text-secondaryText'>Resend OTP</Text>
         </TouchableOpacity>
       )}
-
-      <TouchableOpacity
-        onPress={() => {
-          navigation.goBack();
-        }}
-      >
-        <Text>Go back</Text>
-      </TouchableOpacity>
     </View>
   );
 }
