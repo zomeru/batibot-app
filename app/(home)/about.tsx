@@ -5,7 +5,8 @@ import { DrawerActions } from '@react-navigation/native';
 
 import { DefaultButton } from '~components/Button';
 import { supabase } from '~utils/supabase';
-
+import JumpingDots from '~components/JumpingDots';
+import Toast from 'react-native-toast-message';
 export default function SettingsScreen() {
   const navigation = useNavigation();
 
@@ -28,12 +29,21 @@ export default function SettingsScreen() {
       <StatusBar style='light' />
       <Text className='text-primaryText'>SETTINGS</Text>
 
-      <DefaultButton title='Delete messages' onPress={handleDeleteMessages} />
+      <DefaultButton
+        title='Delete messages'
+        onPress={() => {
+          Toast.show({
+            type: 'home-success',
+            text1: 'asdasdasdasd',
+          });
+        }}
+      />
 
       <DefaultButton
         title='Delete conversations'
         onPress={handleDeleteConversations}
       />
+      <JumpingDots />
     </View>
   );
 }

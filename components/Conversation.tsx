@@ -13,6 +13,7 @@ interface ConversationProps {
   prompt: string;
   setPrompt: React.Dispatch<React.SetStateAction<string>>;
   handleSendMessage: () => Promise<void>;
+  gptTyping: boolean;
   originalConversationLength?: number;
   type?: ConversationType;
 }
@@ -24,6 +25,7 @@ function Conversation({
   handleSendMessage,
   type = 'new',
   originalConversationLength,
+  gptTyping,
 }: ConversationProps) {
   const { user } = useAuth();
 
@@ -47,17 +49,16 @@ function Conversation({
                     imageUrl={user?.user_metadata.avatar_url}
                     prompt={convo.prompt}
                   />
-                  {convo.response && (
-                    <GPTResponse
-                      type={
-                        originalConversationLength &&
-                        originalConversationLength < i + 1
-                          ? 'new'
-                          : type
-                      }
-                      response={convo.response}
-                    />
-                  )}
+                  <GPTResponse
+                    type={
+                      originalConversationLength &&
+                      originalConversationLength < i + 1
+                        ? 'new'
+                        : type
+                    }
+                    response={convo.response}
+                    gptTyping={gptTyping}
+                  />
                 </Fragment>
               ))}
             </ScrollView>

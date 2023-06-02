@@ -21,12 +21,6 @@ export const useGPT = (type: 'new' | 'old', conversationId?: number) => {
   const navigation = useNavigation();
   const { user } = useAuth();
 
-  const segments = useSegments();
-
-  console.log({
-    SEGMENTS: segments,
-  });
-
   const [newConversationId, setNewConversationId] = useState<number | null>();
   const [prompt, setPrompt] = useState('');
   const [titleChanged, setTitleChanged] = useState(false);
@@ -34,6 +28,7 @@ export const useGPT = (type: 'new' | 'old', conversationId?: number) => {
     []
   );
   const [loading, setLoading] = useState(true);
+  const [gptTyping, setGptTyping] = useState(false);
   const [originalConversationLength, setOriginalConversationLength] =
     useState(0);
 
@@ -77,6 +72,7 @@ export const useGPT = (type: 'new' | 'old', conversationId?: number) => {
   }, [conversationId]);
 
   const handleSendMessage = async () => {
+    setGptTyping(true);
     const newConversationList = [
       ...conversationList,
       {
@@ -87,15 +83,15 @@ export const useGPT = (type: 'new' | 'old', conversationId?: number) => {
     setConversationList(newConversationList);
     setPrompt('');
 
-    const formattedRecentMessages = [...conversationList]
-      .reverse()
+    const formattedRecentMessages = conversationList
       .map((recent, i) => {
-        return `${i + 1}\n User prompt: ${
-          recent.prompt
-        }\n Assistant response: ${recent.response}\n`;
+        const numbering = conversationList.length - i;
+
+        return `${numbering}\n User prompt: "${recent.prompt}"\n Assistant response: "${recent.response}"\n`;
       })
       .join('\n');
 
+    console.log(formattedRecentMessages);
     const gptResponse = await generateGPTResponse(
       prompt,
       formattedRecentMessages
@@ -114,6 +110,7 @@ export const useGPT = (type: 'new' | 'old', conversationId?: number) => {
           return conversation;
         }
       );
+      setGptTyping(false);
       setConversationList(newConversationListWithResponse);
 
       if (!titleChanged) {
@@ -149,5 +146,6 @@ export const useGPT = (type: 'new' | 'old', conversationId?: number) => {
     handleSendMessage,
     loading,
     originalConversationLength,
+    gptTyping,
   };
 };

@@ -35,7 +35,7 @@ export const useAuthenticate = () => {
   }: SignInParams) => {
     if (!email || !password) {
       Toast.show({
-        type: 'info',
+        type: 'warning',
         text1: 'Email and password are required.',
       });
       return;

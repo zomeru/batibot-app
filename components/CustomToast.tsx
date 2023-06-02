@@ -1,15 +1,22 @@
 import { Text, View } from 'react-native';
-import { ToastConfig, ToastConfigParams } from 'react-native-toast-message';
+import { ToastConfigParams } from 'react-native-toast-message';
 import { AntDesign, MaterialIcons } from '@expo/vector-icons';
 
-export default function CustomToast(props: ToastConfigParams<ToastConfig>) {
+type CustomToastProps = ToastConfigParams<any> & {
+  segment?: 'home' | 'auth';
+};
+
+export default function CustomToast({
+  segment = 'home',
+  ...props
+}: CustomToastProps) {
   const { type, text1, text2 } = props;
 
   return (
     <View
-      className={`flex flex-1 w-full h-[120px] bg-[#3eb6d12f] -translate-y-[50px] justify-end items-center py-1 ${
+      className={`flex flex-1 w-full h-[120px]  -translate-y-[50px] justify-end items-center py-1 ${
         text1 && text2 ? 'h-[130px]' : 'h-[110px]'
-      }`}
+      } bg-[#292b37e1] border-b-2 border-tertiaryBackground`}
     >
       {type === 'success' ? (
         <AntDesign

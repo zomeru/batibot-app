@@ -15,6 +15,7 @@ export default function ConversationScreen() {
     handleSendMessage,
     loading,
     originalConversationLength,
+    gptTyping,
   } = useGPT('old', Number(searchParams.conversationId));
 
   return (
@@ -31,6 +32,7 @@ export default function ConversationScreen() {
           handleSendMessage={handleSendMessage}
           type='old'
           originalConversationLength={originalConversationLength}
+          gptTyping={gptTyping}
         />
       )}
     </>
