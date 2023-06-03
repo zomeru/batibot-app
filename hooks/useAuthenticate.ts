@@ -28,11 +28,7 @@ interface VerifyEmailParams {
 export const useAuthenticate = () => {
   const router = useRouter();
 
-  const handleSignIn = async ({
-    email,
-    password,
-    setLoading,
-  }: SignInParams) => {
+  const handleSignIn = async ({ email, password, setLoading }: SignInParams) => {
     if (!email || !password) {
       Toast.show({
         type: 'warning',
@@ -73,12 +69,7 @@ export const useAuthenticate = () => {
     setLoading(false);
   };
 
-  const handleSignUp = async ({
-    email,
-    password,
-    confirmPassword,
-    setLoading,
-  }: SignUpParams) => {
+  const handleSignUp = async ({ email, password, confirmPassword, setLoading }: SignUpParams) => {
     const lowerCaseEmail = email.toLowerCase().trim();
 
     if (!lowerCaseEmail || !password || !confirmPassword) {
@@ -140,11 +131,7 @@ export const useAuthenticate = () => {
     setLoading(false);
   };
 
-  const handleVerifyEmail = async ({
-    code,
-    setLoading,
-    email,
-  }: VerifyEmailParams) => {
+  const handleVerifyEmail = async ({ code, setLoading, email }: VerifyEmailParams) => {
     if (!code) {
       Toast.show({
         type: 'warning',

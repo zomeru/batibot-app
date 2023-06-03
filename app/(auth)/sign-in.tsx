@@ -78,17 +78,9 @@ export default function SignInScreen() {
           </View>
         </View>
 
-        <ProviderButton
-          provider="Google"
-          className="mb-3"
-          onPress={async () => oAuthLogin('google')}
-        />
-        <ProviderButton
-          onPress={async () => oAuthLogin('discord')}
-          provider="Discord"
-          className="mb-3"
-        />
-        <ProviderButton onPress={async () => oAuthLogin('github')} provider="Github" />
+        <ProviderButton provider="Google" className="mb-3" onPress={() => oAuthLogin('google')} />
+        <ProviderButton onPress={() => oAuthLogin('discord')} provider="Discord" className="mb-3" />
+        <ProviderButton onPress={() => oAuthLogin('github')} provider="Github" />
       </View>
     </View>
   );

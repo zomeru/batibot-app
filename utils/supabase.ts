@@ -4,6 +4,7 @@ import { createClient } from '@supabase/supabase-js';
 import * as AuthSession from 'expo-auth-session';
 import Toast from 'react-native-toast-message';
 import Constants from 'expo-constants';
+import * as Linking from 'expo-linking';
 
 const SUPABASE_URL = Constants.expoConfig?.extra?.SUPABASE_URL;
 const SUPABASE_SERVICE_KEY = Constants.expoConfig?.extra?.SUPABASE_SERVICE_KEY;
@@ -33,7 +34,14 @@ type OAuthProvider = 'google' | 'github' | 'discord';
 
 export const oAuthLogin = async (provider: OAuthProvider) => {
   const redirectUrl = AuthSession.makeRedirectUri({
-    path: '/auth/callback',
+    path: `/`,
+    useProxy: false,
+  });
+
+  console.log({
+    REDIRECT_URL: redirectUrl,
+    REDIRECT_URL2: redirectUrl,
+    REDIRECT_URL3: redirectUrl,
   });
 
   const authUrl = `${SUPABASE_URL}/auth/v1/authorize?provider=${provider}&redirect_to=${redirectUrl}&prompt=consent`;
