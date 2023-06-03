@@ -15,23 +15,14 @@ interface TextInputComponentProps {
   onIconPress?: () => void;
   iconColor?: string;
   value?: string;
-  setValue?:
-    | React.Dispatch<React.SetStateAction<string>>
-    | ((text: string) => void);
+  setValue?: React.Dispatch<React.SetStateAction<string>> | ((text: string) => void);
   className?: string;
   secure?: boolean;
-  keyboardType?:
-    | 'default'
-    | 'email-address'
-    | 'numeric'
-    | 'phone-pad'
-    | 'number-pad';
+  keyboardType?: 'default' | 'email-address' | 'numeric' | 'phone-pad' | 'number-pad';
   maxLength?: number;
   multiline?: boolean;
   numberOfLines?: number;
-  onContentSizeChange?: (
-    event: NativeSyntheticEvent<TextInputContentSizeChangeEventData>
-  ) => void;
+  onContentSizeChange?: (event: NativeSyntheticEvent<TextInputContentSizeChangeEventData>) => void;
 }
 
 export default function TextInputComponent({
@@ -55,39 +46,34 @@ export default function TextInputComponent({
     <View
       className={`flex flex-row justify-center items-center bg-secondaryBackground px-3 rounded-sm ${
         className ?? ''
-      }`}
-    >
+      }`}>
       <TextInput
         style={{}}
         multiline={multiline}
         numberOfLines={numberOfLines}
         maxLength={maxLength}
-        autoFocus
+        autoFocus={false}
         keyboardType={keyboardType}
         secureTextEntry={iconName === 'eye-off-outline' || secure}
-        className='flex flex-1 py-4 text-tertiaryText bg-secondaryBackground'
+        className="flex flex-1 py-4 text-tertiaryText bg-secondaryBackground"
         value={value}
-        placeholderTextColor='#5e6980'
+        placeholderTextColor="#5e6980"
         placeholder={placeholder}
-        onChangeText={val => {
+        onChangeText={(val) => {
           if (setValue) setValue(val);
         }}
         onContentSizeChange={onContentSizeChange}
-        underlineColorAndroid='transparent'
+        underlineColorAndroid="transparent"
       />
       {showIcon && (
         <>
           {onIconPress ? (
-            <TouchableOpacity className='pl-1' onPress={onIconPress}>
-              <Ionicons
-                name={iconName}
-                size={iconSize}
-                color={iconColor || '#a0a7b8'}
-              />
+            <TouchableOpacity className="pl-1" onPress={onIconPress}>
+              <Ionicons name={iconName} size={iconSize} color={iconColor || '#a0a7b8'} />
             </TouchableOpacity>
           ) : (
             <Ionicons
-              className='pl-1'
+              className="pl-1"
               name={iconName}
               size={iconSize}
               color={iconColor || '#a0a7b8'}

@@ -1,13 +1,15 @@
 import { Configuration, OpenAIApi } from 'openai';
+
 import Constants from 'expo-constants';
 
 const createConfig = () => {
-  const API_KEY = Constants.manifest?.extra?.OPENAI_API_KEY;
-  if (!API_KEY) {
-    throw new Error('OPENAI_API_KEY is not defined');
+  const OPENAI_API_KEY = Constants.expoConfig?.extra?.OPENAI_API_KEY;
+
+  if (!OPENAI_API_KEY) {
+    console.log('OPENAI_API_KEY is not set in .env file.');
   }
 
-  return new Configuration({ apiKey: API_KEY });
+  return new Configuration({ apiKey: OPENAI_API_KEY });
 };
 
 export const openai = new OpenAIApi(createConfig());
@@ -35,10 +37,7 @@ const gptCreateChatCompletion = async ({
     ],
   });
 
-  if (
-    response.data.choices.length <= 0 ||
-    !response.data.choices[0]?.message?.content
-  ) {
+  if (response.data.choices.length <= 0 || !response.data.choices[0]?.message?.content) {
     return null;
   }
 
@@ -58,10 +57,7 @@ export const generateTitle = async (prompt: string) => {
   return generatedTitle;
 };
 
-export const generateGPTResponse = async (
-  prompt: string,
-  recentMessages?: string
-) => {
+export const generateGPTResponse = async (prompt: string, recentMessages?: string) => {
   const gptResponse = await gptCreateChatCompletion({
     userPrompt: prompt,
     systemContent: `Respond to the user's messages as best, accurately, convincingly, and as human-like as you can, keep it short and straight to the point. Maximum of 5 sentences. You can make it long if the users asks for it. You can also add bullets and numbers in a list in addition to the 5 sentences, but add them only if the user asks for it. You can try to be funny sometimes. Also, if they ask if you know or who Zomer, Zomer Gregorio, or zomeru is (that's me by the way, who created this AI messaging app (Batibot, name of the app)), you can try to respond this message instead: "Zomer is a Software Engineer based in the Philippines and the creator of this app. You can check out his website at https://zomeru.com."${

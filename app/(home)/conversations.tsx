@@ -44,10 +44,7 @@ export default function ConversationsScreen() {
   const { handleScrollToPosition } = useScrollViewFetch();
 
   const fetchConversations = useCallback(async () => {
-    const [conversations] = await getUserConversations(
-      user?.email as string,
-      limit
-    );
+    const [conversations] = await getUserConversations(user?.email as string, limit);
     setMyConversations(conversations as ConversationsType);
   }, [limit]);
 
@@ -68,9 +65,7 @@ export default function ConversationsScreen() {
     };
   }, [fetchConversations, initialLoading]);
 
-  const handleScrollFetch = ({
-    nativeEvent,
-  }: NativeSyntheticEvent<NativeScrollEvent>) => {
+  const handleScrollFetch = ({ nativeEvent }: NativeSyntheticEvent<NativeScrollEvent>) => {
     handleScrollToPosition({
       nativeEvent,
       fetching,
@@ -89,10 +84,7 @@ export default function ConversationsScreen() {
         });
       },
       topScrollCallback: async () => {
-        const [conversations] = await getUserConversations(
-          user?.email as string,
-          20
-        );
+        const [conversations] = await getUserConversations(user?.email as string, 20);
         setMyConversations(conversations as ConversationsType);
         setAtTop(false);
         if (conversations) {
@@ -107,12 +99,12 @@ export default function ConversationsScreen() {
   };
 
   return (
-    <View className='flex items-center flex-1 w-screen h-screen bg-primaryBackground'>
-      <StatusBar style='light' />
+    <View className="flex items-center flex-1 w-screen h-screen bg-primaryBackground">
+      <StatusBar style="light" />
       {initialLoading && <ConversationsLoader />}
 
       {!initialLoading && myConversations.length > 0 && (
-        <View className='w-full h-full px-3 pb-10'>
+        <View className="w-full h-full px-3 pb-10">
           <ScrollView
             ref={scrollViewRef}
             onContentSizeChange={() => {
@@ -121,15 +113,14 @@ export default function ConversationsScreen() {
               }
             }}
             scrollEventThrottle={16}
-            className='space-y-3'
+            className="space-y-3"
             onScroll={handleScrollFetch}
             onTouchStart={() => setIsScrolling(true)}
-            onTouchEnd={() => setIsScrolling(false)}
-          >
+            onTouchEnd={() => setIsScrolling(false)}>
             {atTop && (
-              <View className='space-y-1'>
-                <ActivityIndicator size='small' />
-                <Text className='text-center text-secondaryText'>
+              <View className="space-y-1">
+                <ActivityIndicator size="small" />
+                <Text className="text-center text-secondaryText">
                   {!fetching ? 'Release to refresh' : 'Refreshing...'}
                 </Text>
               </View>
@@ -146,7 +137,7 @@ export default function ConversationsScreen() {
 
               return (
                 <TouchableOpacity
-                  className='w-full rounded-md bg-secondaryBackground h-[40px] flex flex-row items-center justify-between px-3'
+                  className="w-full rounded-md bg-secondaryBackground h-[40px] flex flex-row items-center justify-between px-3"
                   key={conversation.title + conversation.id}
                   onPress={() =>
                     router.push({
@@ -155,21 +146,16 @@ export default function ConversationsScreen() {
                         conversationId: conversation.id,
                       },
                     })
-                  }
-                >
-                  <Text className='text-sm text-secondaryText'>
-                    {conversation.title}
-                  </Text>
-                  <Text className='text-xs text-secondaryText'>
-                    {formattedDate}
-                  </Text>
+                  }>
+                  <Text className="text-sm text-secondaryText">{conversation.title}</Text>
+                  <Text className="text-xs text-secondaryText">{formattedDate}</Text>
                 </TouchableOpacity>
               );
             })}
             {atBottom && (
-              <View className='space-y-1'>
-                <ActivityIndicator size='small' />
-                <Text className='text-center text-secondaryText'>
+              <View className="space-y-1">
+                <ActivityIndicator size="small" />
+                <Text className="text-center text-secondaryText">
                   {!fetching ? 'Release to load more' : 'Loading...'}
                 </Text>
               </View>
@@ -178,23 +164,21 @@ export default function ConversationsScreen() {
         </View>
       )}
       {!initialLoading && myConversations.length < 1 && (
-        <View className='flex items-center justify-center w-full h-full mb-6'>
+        <View className="flex items-center justify-center w-full h-full mb-6">
           <Image
-            className='w-20 h-20 opacity-60'
+            className="w-20 h-20 opacity-60"
             source={{
               uri: 'https://i.imgur.com/qZLxVqM.png',
             }}
           />
-          <Text className='my-1 text-lg text-secondaryText'>
-            You have no conversations yet.
-          </Text>
-          <Text className='px-5 text-center text-secondaryText'>
+          <Text className="my-1 text-lg text-secondaryText">You have no conversations yet.</Text>
+          <Text className="px-5 text-center text-secondaryText">
             Start a new conversation by clicking the button below.
           </Text>
-          <View className='w-full px-20'>
+          <View className="w-full px-20">
             <DefaultButton
-              title='New chat'
-              className='mt-10'
+              title="New chat"
+              className="mt-10"
               onPress={() => router.push('/home')}
             />
           </View>

@@ -5,15 +5,12 @@ import { useRouter } from 'expo-router';
 
 import { supabase } from '~utils/supabase';
 import { findOrCreateUser } from '~services/supabase';
-import { set } from 'react-native-reanimated';
 
 type UserContextProps = {
   user?: User;
 };
 
-const AuthContext = createContext<UserContextProps>(
-  null as unknown as UserContextProps
-);
+const AuthContext = createContext<UserContextProps>(null as unknown as UserContextProps);
 
 export function useAuth() {
   return React.useContext(AuthContext);
@@ -25,13 +22,11 @@ function useProtectedRoute(user?: User, loading?: boolean) {
   const router = useRouter();
 
   React.useEffect(() => {
-    const signedIn =
-      user && (segments[0] === '(auth)' || segments.length === 0);
+    const signedIn = user && (segments[0] === '(auth)' || segments.length === 0);
 
-    const notSignedIn =
-      !user && !(segments[0] === '(auth)' || segments[0] !== undefined);
+    const notSignedIn = !user && !(segments[0] === '(auth)' || segments[0] !== undefined);
 
-    if (loading) {
+    if (loading && !user) {
       router.replace('/');
       return;
     }
@@ -54,7 +49,6 @@ export default function Provider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     async function getSession() {
-      setLoading(true);
       const { data } = await supabase.auth.getSession();
       const currentUser = data?.session?.user;
       console.log('currentUser ID', currentUser?.id);
@@ -69,19 +63,16 @@ export default function Provider({ children }: { children: React.ReactNode }) {
       getSession().catch(console.error);
     }
 
-    const { data: authData } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        setLoading(true);
-        console.log('event', event);
-        const user = session?.user ?? undefined;
-        setUser(user);
-        console.log('New user ID', user?.id);
-        if (user) {
-          await findOrCreateUser(user.email!, user.id);
-        }
-        setLoading(false);
+    const { data: authData } = supabase.auth.onAuthStateChange(async (event, session) => {
+      console.log('event', event);
+      setLoading(true);
+      const user = session?.user ?? undefined;
+      setUser(user);
+      if (user) {
+        await findOrCreateUser(user.email!, user.id);
       }
-    );
+      setLoading(false);
+    });
 
     return () => {
       authData?.subscription?.unsubscribe();

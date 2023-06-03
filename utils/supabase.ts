@@ -2,8 +2,11 @@ import 'react-native-url-polyfill/auto';
 import * as SecureStore from 'expo-secure-store';
 import { createClient } from '@supabase/supabase-js';
 import * as AuthSession from 'expo-auth-session';
-import Constants from 'expo-constants';
 import Toast from 'react-native-toast-message';
+import Constants from 'expo-constants';
+
+const SUPABASE_URL = Constants.expoConfig?.extra?.SUPABASE_URL;
+const SUPABASE_SERVICE_KEY = Constants.expoConfig?.extra?.SUPABASE_SERVICE_KEY;
 
 const ExpoSecureStoreAdapter = {
   getItem: (key: string) => {
@@ -17,10 +20,7 @@ const ExpoSecureStoreAdapter = {
   },
 };
 
-const supabaseUrl = Constants.expoConfig?.extra?.supabaseUrl;
-const supabaseServiceKey = Constants.expoConfig?.extra?.supabaseServiceKey;
-
-export const supabase = createClient(supabaseUrl, supabaseServiceKey, {
+export const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY, {
   auth: {
     storage: ExpoSecureStoreAdapter as any,
     autoRefreshToken: true,
@@ -36,7 +36,7 @@ export const oAuthLogin = async (provider: OAuthProvider) => {
     path: '/auth/callback',
   });
 
-  const authUrl = `${supabaseUrl}/auth/v1/authorize?provider=${provider}&redirect_to=${redirectUrl}&prompt=consent`;
+  const authUrl = `${SUPABASE_URL}/auth/v1/authorize?provider=${provider}&redirect_to=${redirectUrl}&prompt=consent`;
 
   const authSessionResponse = await AuthSession.startAsync({
     authUrl,

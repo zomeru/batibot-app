@@ -2,15 +2,13 @@ import 'react-native-url-polyfill/auto';
 import { useEffect } from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { useFonts } from 'expo-font';
-import Toast, {
-  ToastConfig,
-  ToastConfigParams,
-} from 'react-native-toast-message';
+import Toast, { ToastConfig, ToastConfigParams } from 'react-native-toast-message';
 import { SplashScreen, Stack } from 'expo-router';
 import { Buffer } from 'buffer';
 
 import { AuthProvider } from '~contexts/index';
 import CustomToast from '~components/CustomToast';
+import 'react-native-gesture-handler';
 
 global.Buffer = Buffer;
 
@@ -21,7 +19,7 @@ export {
 
 export const unstable_settings = {
   // Ensure that reloading on `/modal` keeps a back button present.
-  initialRouteName: '(home)',
+  initialRouteName: 'index',
 };
 
 export default function RootLayout() {
@@ -54,14 +52,13 @@ function RootLayoutNav() {
   return (
     <AuthProvider>
       <Stack
-        initialRouteName='index'
+        initialRouteName="index"
         screenOptions={{
           headerShown: false,
-        }}
-      >
-        <Stack.Screen name='index' />
-        <Stack.Screen name='(home)' />
-        <Stack.Screen name='(auth)' />
+        }}>
+        <Stack.Screen name="index" />
+        <Stack.Screen name="(home)" />
+        <Stack.Screen name="(auth)" />
       </Stack>
       <Toast config={ToastConfigs} />
     </AuthProvider>

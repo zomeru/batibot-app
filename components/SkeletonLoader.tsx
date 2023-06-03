@@ -12,9 +12,7 @@ interface SkeletonLoaderProps {
 const defaultWidth = Dimensions.get('window').width - 30;
 
 const SkeletonLoader = ({ width, height, style }: SkeletonLoaderProps) => {
-  const translateX = useRef(
-    new Animated.Value(-(width || defaultWidth))
-  ).current;
+  const translateX = useRef(new Animated.Value(-(width || defaultWidth))).current;
 
   useEffect(() => {
     Animated.loop(
@@ -36,15 +34,13 @@ const SkeletonLoader = ({ width, height, style }: SkeletonLoaderProps) => {
           overflow: 'hidden',
         },
         style,
-      ])}
-    >
+      ])}>
       <Animated.View
         style={{
           width: '100%',
           height: '100%',
           transform: [{ translateX }],
-        }}
-      >
+        }}>
         <LinearGradient
           style={{ width: '100%', height: '100%' }}
           colors={['#1a1e2474', 'transparent']}

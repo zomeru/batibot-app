@@ -11,6 +11,8 @@ npm-debug.*
 web-build/
 .envrc
 eas*.json
+.env
+*error.log
 
 # macOS
 .DS_Store

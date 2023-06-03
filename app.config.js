@@ -1,40 +1,39 @@
 module.exports = {
   expo: {
-    name: 'batibot-app',
-    slug: 'batibot-app',
+    name: 'Batibot',
+    slug: 'batibot',
     version: '1.0.0',
     orientation: 'portrait',
     icon: './assets/images/icon.png',
-    scheme: 'com.zomeru.batibot-app',
+    scheme: 'com.zomeru.batibot',
     userInterfaceStyle: 'automatic',
     splash: {
       image: './assets/images/splash.png',
       resizeMode: 'contain',
-      backgroundColor: '#ffffff',
+      backgroundColor: '#1a1e24',
     },
     assetBundlePatterns: ['**/*'],
     ios: {
       supportsTablet: true,
-      bundleIdentifier: 'com.zomeru.batibot-app',
+      bundleIdentifier: 'com.zomeru.batibot',
     },
     android: {
       adaptiveIcon: {
         foregroundImage: './assets/images/adaptive-icon.png',
-        backgroundColor: '#ffffff',
+        backgroundColor: '#1a1e24',
       },
-      package: 'com.zomeru.batibot_app',
+      package: 'com.zomeru.batibot',
     },
     web: {
       bundler: 'metro',
       favicon: './assets/images/favicon.png',
     },
     extra: {
-      clerkPublishableKey: process.env.CLERK_PUBLISHABLE_KEY,
-      supabaseServiceKey: process.env.SUPABASE_SERVICE_KEY,
-      supabaseUrl: process.env.SUPABASE_URL,
+      SUPABASE_SERVICE_KEY: process.env.SUPABASE_SERVICE_KEY,
+      SUPABASE_URL: process.env.SUPABASE_URL,
       OPENAI_API_KEY: process.env.OPENAI_API_KEY,
       eas: {
-        projectId: '2f8e7833-f390-48ac-bc07-63dbc0036437',
+        projectId: 'a7c1ba7a-4c42-4c99-b0eb-26be41a890df',
       },
     },
   },

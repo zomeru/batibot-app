@@ -18,53 +18,45 @@ export default function SignInScreen() {
   const { handleSignIn } = useAuthenticate();
 
   return (
-    <View className='flex items-center justify-center flex-1 w-screen h-screen px-8 bg-primaryBackground'>
-      <StatusBar style='light' />
-      <View className='w-full h-auto'>
+    <View className="flex items-center justify-center flex-1 w-screen h-screen px-8 bg-primaryBackground">
+      <StatusBar style="light" />
+      <View className="w-full h-auto">
         <Image
-          className='w-16 h-16 mx-auto opacity-80'
+          className="w-16 h-16 mx-auto opacity-80"
           source={{
             uri: 'https://i.imgur.com/qZLxVqM.png',
           }}
         />
-        <Text className='text-2xl font-bold text-center text-primaryText'>
-          Welcome to Batibot!
-        </Text>
-        <Text className='mb-5 text-sm font-medium text-center text-secondaryText'>
+        <Text className="text-2xl font-bold text-center text-primaryText">Welcome to Batibot!</Text>
+        <Text className="mb-5 text-sm font-medium text-center text-secondaryText">
           Log in to continue to Batibot
         </Text>
+        <TextInput className="mb-3" placeholder="Email" value={email} setValue={setEmail} />
         <TextInput
-          className='mb-3'
-          placeholder='Email'
-          value={email}
-          setValue={setEmail}
-        />
-        <TextInput
-          placeholder='Password'
+          placeholder="Password"
           showIcon
           iconName={seePassword ? 'eye-outline' : 'eye-off-outline'}
-          onIconPress={() => setSeePassword(val => !val)}
+          onIconPress={() => setSeePassword((val) => !val)}
           value={password}
           setValue={setPassword}
         />
         <TouchableOpacity
-          className='mt-3 mb-1'
+          className="mt-3 mb-1"
           onPress={() => {
             Toast.show({
               type: 'info',
               text1: 'Coming soon!',
             });
-          }}
-        >
-          <Text className='text-sm font-medium text-right text-secondaryText'>
+          }}>
+          <Text className="text-sm font-medium text-right text-secondaryText">
             Forgot password?
           </Text>
         </TouchableOpacity>
         <DefaultButton
           loading={loading}
           disabled={loading}
-          title='Log in'
-          className='mt-3'
+          title="Log in"
+          className="mt-3"
           onPress={async () =>
             await handleSignIn({
               email,
@@ -73,33 +65,30 @@ export default function SignInScreen() {
             })
           }
         />
-        <Text className='my-5 text-sm font-medium text-center text-secondaryText'>
+        <Text className="my-5 text-sm font-medium text-center text-secondaryText">
           Don't have an account?{' '}
-          <Link className='text-primaryAccent' href='/sign-up'>
-            Sign up
+          <Link href="/sign-up">
+            <Text className="text-primaryAccent">Sign up</Text>
           </Link>
         </Text>
-        <View className='relative w-full mt-2 mb-8'>
-          <View className='w-full h-[1px] bg-tertiaryText' />
-          <View className='absolute bg-primaryBackground left-[45%] -top-[10px]'>
-            <Text className='px-2 py-[2px] text-tertiaryText'>OR</Text>
+        <View className="relative w-full mt-2 mb-8">
+          <View className="w-full h-[1px] bg-tertiaryText" />
+          <View className="absolute bg-primaryBackground left-[45%] -top-[10px]">
+            <Text className="px-2 py-[2px] text-tertiaryText">OR</Text>
           </View>
         </View>
 
         <ProviderButton
-          provider='Google'
-          className='mb-3'
+          provider="Google"
+          className="mb-3"
           onPress={async () => oAuthLogin('google')}
         />
         <ProviderButton
           onPress={async () => oAuthLogin('discord')}
-          provider='Discord'
-          className='mb-3'
+          provider="Discord"
+          className="mb-3"
         />
-        <ProviderButton
-          onPress={async () => oAuthLogin('github')}
-          provider='Github'
-        />
+        <ProviderButton onPress={async () => oAuthLogin('github')} provider="Github" />
       </View>
     </View>
   );

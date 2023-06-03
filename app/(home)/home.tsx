@@ -2,8 +2,7 @@ import { Conversation } from '~components/index';
 import { useGPT } from '~hooks/useGPT';
 
 export default function HomeScreen() {
-  const { conversationList, prompt, setPrompt, handleSendMessage, gptTyping } =
-    useGPT('new');
+  const { conversationList, prompt, setPrompt, handleSendMessage, gptTyping } = useGPT('new');
 
   return (
     <Conversation

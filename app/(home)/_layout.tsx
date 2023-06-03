@@ -5,18 +5,13 @@ import {
   DrawerItemList,
 } from '@react-navigation/drawer';
 import { FontAwesome, Feather, AntDesign } from '@expo/vector-icons';
-import { useNavigation } from 'expo-router/src/useNavigation';
+import { useNavigation } from 'expo-router';
 import { DrawerActions } from '@react-navigation/native';
 import 'react-native-gesture-handler';
 
 import { supabase } from '~utils/supabase';
 import { useAuth } from '~contexts/auth';
 import { Drawer } from '~components/Drawer';
-
-export const unstable_settings = {
-  // Ensure that reloading on `/modal` keeps a back button present.
-  initialRouteName: 'home',
-};
 
 const isAndroid = Platform.OS === 'android';
 
@@ -34,33 +29,25 @@ function CustomDrawerContent(props: DrawerContentComponentProps) {
         justifyContent: 'space-between',
         display: 'flex',
         flexDirection: 'column',
-        height: '100%',
-      }}
-    >
+        flex: 1,
+      }}>
       <View>
         <View
           className={`w-full h-[40px] bg-secondaryBackground mb-3 flex justify-center items-center ${
             isAndroid ? 'mt-5' : ''
-          }`}
-        >
-          <Text className='text-secondaryText'>{user?.email}</Text>
+          }`}>
+          <Text className="text-secondaryText">{user?.email}</Text>
         </View>
         <DrawerItemList {...props} />
       </View>
 
       <View
-        className={`w-[90%] flex justify-end items-start mx-auto ${
-          isAndroid ? 'mb-10' : 'mb-16'
-        }`}
-      >
+        className={`w-[90%] flex justify-end items-start mx-auto ${isAndroid ? 'mb-10' : 'mb-16'}`}>
         <TouchableOpacity
-          className='flex flex-row items-center w-full px-1 py-3'
-          onPress={handleLogout}
-        >
-          <AntDesign name='logout' size={22} color='#5e6980' />
-          <Text className='ml-8 text-sm font-medium text-secondaryText'>
-            Log out
-          </Text>
+          className="flex flex-row items-center w-full px-1 py-3"
+          onPress={handleLogout}>
+          <AntDesign name="logout" size={22} color="#5e6980" />
+          <Text className="ml-8 text-sm font-medium text-secondaryText">Log out</Text>
         </TouchableOpacity>
       </View>
     </DrawerContentScrollView>
@@ -72,10 +59,9 @@ const MenuIcon = (props: { tintColor?: string }) => {
 
   return (
     <TouchableOpacity
-      className='p-2 ml-2'
-      onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
-    >
-      <Feather name='menu' size={24} color={props.tintColor} />
+      className="p-2 ml-2"
+      onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}>
+      <Feather name="menu" size={24} color={props.tintColor} />
     </TouchableOpacity>
   );
 };
@@ -83,7 +69,7 @@ const MenuIcon = (props: { tintColor?: string }) => {
 export default function HomeLayoutNavigator() {
   return (
     <Drawer
-      initialRouteName='home'
+      initialRouteName="home"
       screenOptions={{
         headerShown: true,
         headerStyle: {
@@ -105,40 +91,35 @@ export default function HomeLayoutNavigator() {
         drawerInactiveBackgroundColor: 'transparent',
         drawerInactiveTintColor: '#5e6980',
       }}
-      drawerContent={CustomDrawerContent}
-    >
+      drawerContent={CustomDrawerContent}>
       <Drawer.Screen
-        name='home'
+        name="home"
         options={{
           title: 'Home',
           headerTitle: 'New chat',
-          drawerIcon: ({ color, size }) => (
-            <FontAwesome name='home' size={size} color={color} />
-          ),
+          drawerIcon: ({ color, size }) => <FontAwesome name="home" size={size} color={color} />,
         }}
       />
       <Drawer.Screen
-        name='conversations'
+        name="conversations"
         options={{
           title: 'Conversation History',
           headerTitle: 'History',
           drawerIcon: ({ color, size }) => (
-            <Feather name='message-square' size={size} color={color} />
+            <Feather name="message-square" size={size} color={color} />
           ),
         }}
       />
       <Drawer.Screen
-        name='about'
+        name="about"
         options={{
           title: 'About',
           headerTitle: 'About',
-          drawerIcon: ({ color, size }) => (
-            <Feather name='info' size={size} color={color} />
-          ),
+          drawerIcon: ({ color, size }) => <Feather name="info" size={size} color={color} />,
         }}
       />
       <Drawer.Screen
-        name='[conversation]'
+        name="[conversation]"
         options={{
           headerTitle: '',
           drawerItemStyle: {

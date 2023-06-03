@@ -11,6 +11,7 @@
       "~hooks/*": ["hooks/*"],
       "~constants/*": ["constants/*"],
       "~services/*": ["services/*"]
-    }
+    },
+    "module": "ES6"
   }
 }
