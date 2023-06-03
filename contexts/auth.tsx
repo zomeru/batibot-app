@@ -6,8 +6,10 @@ import { useRouter } from 'expo-router';
 import { supabase } from '~utils/supabase';
 import { findOrCreateUser } from '~services/supabase';
 
+type UserType = User;
+
 type UserContextProps = {
-  user?: User;
+  user?: UserType;
 };
 
 const AuthContext = createContext<UserContextProps>(null as unknown as UserContextProps);
@@ -17,7 +19,7 @@ export function useAuth() {
 }
 
 // This hook will protect the route access based on user authentication.
-function useProtectedRoute(user?: User, loading?: boolean) {
+function useProtectedRoute(user?: UserType, loading?: boolean) {
   const segments = useSegments();
   const router = useRouter();
 
@@ -42,7 +44,7 @@ function useProtectedRoute(user?: User, loading?: boolean) {
 }
 
 export default function Provider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = React.useState<User | undefined>();
+  const [user, setUser] = React.useState<UserType | undefined>();
   const [loading, setLoading] = React.useState(true);
 
   useProtectedRoute(user, loading);
@@ -52,7 +54,7 @@ export default function Provider({ children }: { children: React.ReactNode }) {
       const { data } = await supabase.auth.getSession();
       const currentUser = data?.session?.user;
       console.log('currentUser ID', currentUser?.id);
-      setUser(currentUser);
+      setUser(currentUser as UserType);
       if (currentUser) {
         await findOrCreateUser(currentUser.email!, currentUser.id);
       }
@@ -67,7 +69,7 @@ export default function Provider({ children }: { children: React.ReactNode }) {
       console.log('event', event);
       setLoading(true);
       const user = session?.user ?? undefined;
-      setUser(user);
+      setUser(user as UserType);
       if (user) {
         await findOrCreateUser(user.email!, user.id);
       }

@@ -33,10 +33,7 @@ export const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY, {
 type OAuthProvider = 'google' | 'github' | 'discord';
 
 export const oAuthLogin = async (provider: OAuthProvider) => {
-  const redirectUrl = AuthSession.makeRedirectUri({
-    path: `/`,
-    useProxy: false,
-  });
+  const redirectUrl = Linking.createURL('expo-auth-session');
 
   console.log({
     REDIRECT_URL: redirectUrl,
@@ -49,6 +46,10 @@ export const oAuthLogin = async (provider: OAuthProvider) => {
   const authSessionResponse = await AuthSession.startAsync({
     authUrl,
     returnUrl: redirectUrl,
+  });
+
+  console.log({
+    AUTHRESPONSE: authSessionResponse,
   });
 
   if (authSessionResponse.type !== 'success') return;

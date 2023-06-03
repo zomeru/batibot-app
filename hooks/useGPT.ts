@@ -25,13 +25,10 @@ export const useGPT = (type: 'new' | 'old', conversationId?: number) => {
   const [newConversationId, setNewConversationId] = useState<number | null>();
   const [prompt, setPrompt] = useState('');
   const [titleChanged, setTitleChanged] = useState(false);
-  const [conversationList, setConversationList] = useState<ConversationList[]>(
-    []
-  );
+  const [conversationList, setConversationList] = useState<ConversationList[]>([]);
   const [loading, setLoading] = useState(true);
   const [gptTyping, setGptTyping] = useState(false);
-  const [originalConversationLength, setOriginalConversationLength] =
-    useState(0);
+  const [originalConversationLength, setOriginalConversationLength] = useState(0);
   const [conversationTitle, setConversationTitle] = useState('');
 
   useEffect(() => {
@@ -65,7 +62,7 @@ export const useGPT = (type: 'new' | 'old', conversationId?: number) => {
       }, 500);
     };
 
-    fetchRecentPrompts().catch(error => {
+    fetchRecentPrompts().catch((error) => {
       console.error(error);
     });
 
@@ -94,24 +91,19 @@ export const useGPT = (type: 'new' | 'old', conversationId?: number) => {
       })
       .join('\n');
 
-    const gptResponse = await generateGPTResponse(
-      prompt,
-      formattedRecentMessages
-    );
+    const gptResponse = await generateGPTResponse(prompt, formattedRecentMessages);
 
     if (gptResponse) {
-      const newConversationListWithResponse = newConversationList.map(
-        (conversation, index) => {
-          if (index === newConversationList.length - 1) {
-            return {
-              ...conversation,
-              response: gptResponse,
-            };
-          }
-
-          return conversation;
+      const newConversationListWithResponse = newConversationList.map((conversation, index) => {
+        if (index === newConversationList.length - 1) {
+          return {
+            ...conversation,
+            response: gptResponse,
+          };
         }
-      );
+
+        return conversation;
+      });
       setGptTyping(false);
       setConversationList(newConversationListWithResponse);
 
@@ -136,11 +128,6 @@ export const useGPT = (type: 'new' | 'old', conversationId?: number) => {
         const [updated, errUpdate] = await updateConversation({
           conversationId: newConversationId || conversationId!,
           title: conversationTitle,
-        });
-
-        console.log({
-          updated,
-          errUpdate,
         });
 
         await createMessage({
