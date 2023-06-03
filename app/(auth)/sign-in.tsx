@@ -8,6 +8,9 @@ import { DefaultButton, ProviderButton } from '~components/Button';
 import { TextInput } from '~components/Input';
 import { useAuthenticate } from '~hooks/useAuthenticate';
 import { oAuthLogin } from '~utils/supabase';
+import * as WebBrowser from 'expo-web-browser';
+
+WebBrowser.maybeCompleteAuthSession();
 
 export default function SignInScreen() {
   const [seePassword, setSeePassword] = useState(false);

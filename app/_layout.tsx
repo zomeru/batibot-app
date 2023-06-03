@@ -5,14 +5,15 @@ import { useFonts } from 'expo-font';
 import Toast, { ToastConfig, ToastConfigParams } from 'react-native-toast-message';
 import { SplashScreen, Stack } from 'expo-router';
 import { Buffer } from 'buffer';
-import * as WebBrowser from 'expo-web-browser';
 
 import { AuthProvider } from '~contexts/index';
 import CustomToast from '~components/CustomToast';
 import 'react-native-gesture-handler';
+import * as WebBrowser from 'expo-web-browser';
+
+WebBrowser.maybeCompleteAuthSession();
 
 global.Buffer = Buffer;
-WebBrowser.maybeCompleteAuthSession();
 
 export {
   // Catch any errors thrown by the Layout component.
