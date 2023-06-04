@@ -1,8 +1,8 @@
-import {useNavigation} from '@react-navigation/native';
-import {useEffect, useState} from 'react';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { useEffect, useState } from 'react';
 import Toast from 'react-native-toast-message';
 
-import {useAuth} from '@src/contexts/AuthProvider';
+import { useAuth } from '@src/contexts/AuthProvider';
 import {
   createConversation,
   createMessage,
@@ -10,7 +10,8 @@ import {
   getConversationMessages,
   updateConversation,
 } from '@src/helpers/supabase';
-import {generateGPTResponse, generateTitle} from '@src/utils/openai';
+import { generateGPTResponse, generateTitle } from '@src/utils/openai';
+import { HOME_STACK } from '@src/navigators/HomeNavigator';
 
 export type ConversationList = {
   id: number;
@@ -19,19 +20,16 @@ export type ConversationList = {
 };
 
 export const useGPT = (type: 'new' | 'old', conversationId?: number) => {
-  const navigation = useNavigation();
-  const {user} = useAuth();
+  const navigation = useNavigation<NavigationProp<HOME_STACK>>();
+  const { user } = useAuth();
 
   const [newConversationId, setNewConversationId] = useState<number | null>();
   const [prompt, setPrompt] = useState('');
   const [titleChanged, setTitleChanged] = useState(false);
-  const [conversationList, setConversationList] = useState<ConversationList[]>(
-    [],
-  );
+  const [conversationList, setConversationList] = useState<ConversationList[]>([]);
   const [loading, setLoading] = useState(true);
   const [gptTyping, setGptTyping] = useState(false);
-  const [originalConversationLength, setOriginalConversationLength] =
-    useState(0);
+  const [originalConversationLength, setOriginalConversationLength] = useState(0);
   const [conversationTitle, setConversationTitle] = useState('');
 
   useEffect(() => {
@@ -40,12 +38,20 @@ export const useGPT = (type: 'new' | 'old', conversationId?: number) => {
 
     const fetchRecentPrompts = async () => {
       setLoading(true);
-      const [conversation] = await getConversation(conversationId);
+      const [conversation, conversationError] = await getConversation(conversationId);
 
       if (conversation) {
-        navigation.setOptions({headerTitle: conversation.title});
+        navigation.setOptions({ headerTitle: conversation.title });
         setTitleChanged(true);
         setConversationTitle(conversation.title);
+      }
+
+      if (conversationError) {
+        Toast.show({
+          type: 'error',
+          text1: 'Something went wrong fetching your conversation.',
+        });
+        return;
       }
 
       const [messages] = await getConversationMessages(conversationId!);
@@ -65,7 +71,7 @@ export const useGPT = (type: 'new' | 'old', conversationId?: number) => {
       }, 500);
     };
 
-    fetchRecentPrompts().catch(error => {
+    fetchRecentPrompts().catch((error) => {
       console.error(error);
     });
 
@@ -94,38 +100,36 @@ export const useGPT = (type: 'new' | 'old', conversationId?: number) => {
       })
       .join('\n');
 
-    const gptResponse = await generateGPTResponse(
-      prompt,
-      formattedRecentMessages,
-    );
+    const gptResponse = await generateGPTResponse(prompt, formattedRecentMessages);
 
     if (gptResponse) {
-      const newConversationListWithResponse = newConversationList.map(
-        (conversation, index) => {
-          if (index === newConversationList.length - 1) {
-            return {
-              ...conversation,
-              response: gptResponse,
-            };
-          }
+      const newConversationListWithResponse = newConversationList.map((conversation, index) => {
+        if (index === newConversationList.length - 1) {
+          return {
+            ...conversation,
+            response: gptResponse,
+          };
+        }
 
-          return conversation;
-        },
-      );
+        return conversation;
+      });
       setGptTyping(false);
       setConversationList(newConversationListWithResponse);
 
-      if (!titleChanged) {
+      if (!titleChanged || conversationTitle === 'New chat') {
         const title = await generateTitle(prompt);
         setConversationTitle(title);
         navigation.setOptions({
           headerTitle: title,
         });
+        navigation.setParams({
+          title,
+        });
         setTitleChanged(true);
         const [data] = await createConversation(title!, user?.email!);
         setNewConversationId(data?.id);
 
-        await createMessage({
+        const [message, messageError] = await createMessage({
           prompt,
           response: gptResponse,
           conversationId: data.id || conversationId!,
@@ -133,7 +137,7 @@ export const useGPT = (type: 'new' | 'old', conversationId?: number) => {
         });
       } else {
         // Update the title even if it's still the same, so that the updated_at field is updated
-        const [updated, errUpdate] = await updateConversation({
+        await updateConversation({
           conversationId: newConversationId || conversationId!,
           title: conversationTitle,
         });
@@ -156,5 +160,7 @@ export const useGPT = (type: 'new' | 'old', conversationId?: number) => {
     loading,
     originalConversationLength,
     gptTyping,
+    setConversationList,
+    setConversationTitle,
   };
 };

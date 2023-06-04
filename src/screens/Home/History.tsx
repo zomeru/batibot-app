@@ -42,10 +42,7 @@ export default function ConversationsScreen({ navigation }: HomeProps) {
   const { handleScrollToPosition } = useScrollViewFetch();
 
   const fetchConversations = useCallback(async () => {
-    const [conversations] = await getUserConversations(
-      user?.email as string,
-      limit
-    );
+    const [conversations] = await getUserConversations(user?.email as string, limit);
     setMyConversations(conversations as ConversationsType);
   }, [limit]);
 
@@ -58,7 +55,7 @@ export default function ConversationsScreen({ navigation }: HomeProps) {
 
     const timer = setTimeout(() => {
       setInitialLoading(false);
-    }, 0);
+    }, 600);
 
     return () => {
       unsubscribe();
@@ -66,9 +63,7 @@ export default function ConversationsScreen({ navigation }: HomeProps) {
     };
   }, [fetchConversations, initialLoading]);
 
-  const handleScrollFetch = ({
-    nativeEvent,
-  }: NativeSyntheticEvent<NativeScrollEvent>) => {
+  const handleScrollFetch = ({ nativeEvent }: NativeSyntheticEvent<NativeScrollEvent>) => {
     if (initialLoading) return;
 
     handleScrollToPosition({
@@ -90,10 +85,7 @@ export default function ConversationsScreen({ navigation }: HomeProps) {
         setAtBottom(false);
       },
       topScrollCallback: async () => {
-        const [conversations] = await getUserConversations(
-          user?.email as string,
-          20
-        );
+        const [conversations] = await getUserConversations(user?.email as string, 20);
         setMyConversations(conversations as ConversationsType);
         setAtTop(false);
         if (conversations) {
@@ -108,11 +100,11 @@ export default function ConversationsScreen({ navigation }: HomeProps) {
   };
 
   return (
-    <View className='flex items-center flex-1 w-screen h-screen bg-primaryBackground'>
+    <View className="flex items-center flex-1 w-screen h-screen bg-primaryBackground">
       {initialLoading && <ConversationsLoader />}
 
       {!initialLoading && myConversations.length > 0 && (
-        <View className='w-full h-full px-3 pb-5'>
+        <View className="w-full h-full px-3 pb-5">
           <ScrollView
             ref={scrollViewRef}
             onContentSizeChange={() => {
@@ -121,7 +113,7 @@ export default function ConversationsScreen({ navigation }: HomeProps) {
               }
             }}
             scrollEventThrottle={16}
-            className='space-y-3'
+            className="space-y-3"
             onTouchStart={() => {
               setFirstTouched(true);
               setIsScrolling(true);
@@ -129,53 +121,47 @@ export default function ConversationsScreen({ navigation }: HomeProps) {
             onTouchEnd={() => {
               setIsScrolling(false);
             }}
-            onScroll={e => {
+            onScroll={(e) => {
               handleScrollFetch(e);
-            }}
-          >
+            }}>
             {atTop && isScrolling && (
-              <View className='space-y-1'>
-                <ActivityIndicator size='small' />
-                <Text className='text-center text-secondaryText'>
+              <View className="space-y-1">
+                <ActivityIndicator size="small" />
+                <Text className="text-center font-roboto text-secondaryText">
                   {!fetching ? 'Release to refresh' : 'Refreshing...'}
                 </Text>
               </View>
             )}
-            {[...myConversations, ...myConversations, ...myConversations].map(
-              (conversation, i) => {
-                // format date 01-01-2021
-                const formattedDate = new Date(conversation.updated_at)
-                  .toLocaleDateString('en-US', {
-                    year: '2-digit',
-                    month: '2-digit',
-                    day: '2-digit',
-                  })
-                  .replace(/\//g, '-');
+            {myConversations.map((conversation, i) => {
+              // format date 01-01-2021
+              const formattedDate = new Date(conversation.updated_at)
+                .toLocaleDateString('en-US', {
+                  year: '2-digit',
+                  month: '2-digit',
+                  day: '2-digit',
+                })
+                .replace(/\//g, '-');
 
-                return (
-                  <TouchableOpacity
-                    className='w-full rounded-md bg-secondaryBackground h-[40px] flex flex-row items-center justify-between px-3'
-                    key={conversation.title + conversation.id + i}
-                    onPress={() => {
-                      navigation.navigate(HOME_STACK.CONVERSATION, {
-                        conversationId: conversation.id,
-                      });
-                    }}
-                  >
-                    <Text className='text-sm text-secondaryText'>
-                      {conversation.title}
-                    </Text>
-                    <Text className='text-xs text-secondaryText'>
-                      {formattedDate}
-                    </Text>
-                  </TouchableOpacity>
-                );
-              }
-            )}
+              return (
+                <TouchableOpacity
+                  className="w-full rounded-md bg-secondaryBackground h-[40px] flex flex-row items-center justify-between px-3"
+                  key={conversation.title + conversation.id + i}
+                  onPress={() => {
+                    navigation.navigate(HOME_STACK.CONVERSATION, {
+                      conversationId: conversation.id,
+                    });
+                  }}>
+                  <Text className="text-sm font-roboto text-secondaryText">
+                    {conversation.title}
+                  </Text>
+                  <Text className="text-xs font-roboto text-secondaryText">{formattedDate}</Text>
+                </TouchableOpacity>
+              );
+            })}
             {atBottom && isScrolling && (
-              <View className='space-y-1'>
-                <ActivityIndicator size='small' />
-                <Text className='text-center text-secondaryText'>
+              <View className="space-y-1">
+                <ActivityIndicator size="small" />
+                <Text className="text-center font-roboto text-secondaryText">
                   {!fetching ? 'Release to load more' : 'Loading...'}
                 </Text>
               </View>
@@ -184,23 +170,23 @@ export default function ConversationsScreen({ navigation }: HomeProps) {
         </View>
       )}
       {!initialLoading && myConversations.length < 1 && (
-        <View className='flex items-center justify-center w-full h-full mb-6'>
+        <View className="flex items-center justify-center w-full h-full mb-6">
           <Image
-            className='w-20 h-20 opacity-60'
+            className="w-20 h-20 opacity-60"
             source={{
               uri: 'https://i.imgur.com/qZLxVqM.png',
             }}
           />
-          <Text className='my-1 text-lg text-secondaryText'>
+          <Text className="my-1 text-lg font-roboto text-secondaryText">
             You have no conversations yet.
           </Text>
-          <Text className='px-5 text-center text-secondaryText'>
+          <Text className="px-5 text-center font-roboto text-secondaryText">
             Start a new conversation by clicking the button below.
           </Text>
-          <View className='w-full px-20'>
+          <View className="w-full px-20">
             <DefaultButton
-              title='New chat'
-              className='mt-10'
+              title="New chat"
+              className="mt-10"
               onPress={() => {
                 navigation.navigate(HOME_STACK.HOME);
               }}

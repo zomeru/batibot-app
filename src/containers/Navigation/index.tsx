@@ -1,10 +1,6 @@
 import * as React from 'react';
 import { createNavigationContainerRef } from '@react-navigation/native';
-import {
-  createStackNavigator,
-  StackScreenProps,
-  TransitionPresets,
-} from '@react-navigation/stack';
+import { createStackNavigator, StackScreenProps, TransitionPresets } from '@react-navigation/stack';
 
 import { AuthNavigator, HomeNavigator } from '@src/navigators';
 import InitialLoadingScreen from '@src/screens/Loading';
@@ -39,10 +35,7 @@ export const TransitionScreenOptions = {
 
 export default function RootNavigation() {
   return (
-    <Stack.Navigator
-      screenOptions={TransitionScreenOptions}
-      initialRouteName={ROOT_STACK.LOADING}
-    >
+    <Stack.Navigator screenOptions={TransitionScreenOptions} initialRouteName={ROOT_STACK.LOADING}>
       <Stack.Screen
         name={ROOT_STACK.LOADING}
         component={InitialLoadingScreen}

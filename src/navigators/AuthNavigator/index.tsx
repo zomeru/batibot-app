@@ -1,8 +1,4 @@
-import {
-  createStackNavigator,
-  StackScreenProps,
-  TransitionPresets,
-} from '@react-navigation/stack';
+import { createStackNavigator, StackScreenProps, TransitionPresets } from '@react-navigation/stack';
 
 import { SignInScreen, SignUpScreen, VerifyScreen } from '@src/screens';
 
@@ -32,8 +28,7 @@ export default function AuthNavigator() {
       screenOptions={{
         headerShown: false,
         ...TransitionPresets.SlideFromRightIOS,
-      }}
-    >
+      }}>
       <Stack.Screen name={AUTH_STACK.SIGN_IN} component={SignInScreen} />
       <Stack.Screen name={AUTH_STACK.SIGN_UP} component={SignUpScreen} />
       <Stack.Screen name={AUTH_STACK.VERIFY} component={VerifyScreen} />

@@ -16,9 +16,8 @@ export function ExternalLink({
     <TouchableOpacity
       onPress={() => {
         Linking.openURL(href);
-      }}
-    >
-      <Text style={style} className={className}>
+      }}>
+      <Text style={style} className={`font-roboto ${className}`}>
         {text}
       </Text>
     </TouchableOpacity>

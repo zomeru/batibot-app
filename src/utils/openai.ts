@@ -1,13 +1,14 @@
-import {Configuration, OpenAIApi} from 'openai';
+import { Configuration, OpenAIApi } from 'openai';
+import Toast from 'react-native-toast-message';
 
-import {OPENAI_API_KEY} from '@env';
+import { OPENAI_API_KEY } from '@env';
 
 const createConfig = () => {
   if (!OPENAI_API_KEY) {
     console.log('OPENAI_API_KEY is not set in .env file.');
   }
 
-  return new Configuration({apiKey: OPENAI_API_KEY});
+  return new Configuration({ apiKey: OPENAI_API_KEY });
 };
 
 export const openai = new OpenAIApi(createConfig());
@@ -21,28 +22,35 @@ const gptCreateChatCompletion = async ({
   userPrompt,
   systemContent,
 }: GPTCreateChatCompletionParams) => {
-  const response = await openai.createChatCompletion({
-    model: 'gpt-3.5-turbo',
-    messages: [
-      {
-        role: 'system',
-        content: systemContent,
-      },
-      {
-        role: 'user',
-        content: userPrompt,
-      },
-    ],
-  });
+  try {
+    const response = await openai.createChatCompletion({
+      model: 'gpt-3.5-turbo',
+      messages: [
+        {
+          role: 'system',
+          content: systemContent,
+        },
+        {
+          role: 'user',
+          content: userPrompt.trim(),
+        },
+      ],
+    });
 
-  if (
-    response.data.choices.length <= 0 ||
-    !response.data.choices[0]?.message?.content
-  ) {
+    if (response.data.choices.length <= 0 || !response.data.choices[0]?.message?.content) {
+      // TODO
+      Toast.show({
+        type: 'error',
+        text1: 'gptCreateChatCompletion ERROR',
+      });
+      return null;
+    }
+
+    return response?.data?.choices[0]?.message?.content;
+  } catch (error: any) {
+    console.log('GPT ERROR', error.message);
     return null;
   }
-
-  return response?.data?.choices[0]?.message?.content;
 };
 
 export const generateTitle = async (prompt: string) => {
@@ -58,10 +66,7 @@ export const generateTitle = async (prompt: string) => {
   return generatedTitle;
 };
 
-export const generateGPTResponse = async (
-  prompt: string,
-  recentMessages?: string,
-) => {
+export const generateGPTResponse = async (prompt: string, recentMessages?: string) => {
   const gptResponse = await gptCreateChatCompletion({
     userPrompt: prompt,
     systemContent: `Respond to the user's messages as best, accurately, convincingly, and as human-like as you can, keep it short and straight to the point. Maximum of 5 sentences. You can make it long if the users asks for it. You can also add bullets and numbers in a list in addition to the 5 sentences, but add them only if the user asks for it. You can try to be funny sometimes. Also, if they ask if you know or who Zomer, Zomer Gregorio, or zomeru is (that's me by the way, who created this AI messaging app (Batibot, name of the app)), you can try to respond this message instead: "Zomer is a Software Engineer based in the Philippines and the creator of this app. You can check out his website at https://zomeru.com."${
@@ -72,7 +77,7 @@ export const generateGPTResponse = async (
   });
 
   if (!gptResponse) {
-    return 'Something went wrong on our end. Please try again.';
+    return 'Something went wrong on our end. Please try again. If the problem persists, please contact us at zomergregorio@gmail.com.';
   }
 
   return gptResponse;

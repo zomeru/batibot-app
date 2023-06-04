@@ -25,32 +25,24 @@ function CustomDrawerContent(props: DrawerContentComponentProps) {
         display: 'flex',
         flexDirection: 'column',
         flex: 1,
-      }}
-    >
+      }}>
       <View>
         <View
           className={`w-full h-[40px] bg-secondaryBackground mb-3 flex justify-center items-center ${
             isAndroid ? 'mt-5' : ''
-          }`}
-        >
-          <Text className='text-secondaryText'>{user?.email}</Text>
+          }`}>
+          <Text className="font-roboto text-secondaryText">{user?.email}</Text>
         </View>
         <DrawerItemList {...props} />
       </View>
 
       <View
-        className={`w-[90%] flex justify-end items-start mx-auto ${
-          isAndroid ? 'mb-10' : 'mb-16'
-        }`}
-      >
+        className={`w-[90%] flex justify-end items-start mx-auto ${isAndroid ? 'mb-10' : 'mb-16'}`}>
         <TouchableOpacity
-          className='flex flex-row items-center w-full px-1 py-3'
-          onPress={handleLogout}
-        >
-          <AntDesignIcon name='logout' size={22} color='#5e6980' />
-          <Text className='ml-8 text-sm font-medium text-secondaryText'>
-            Log out
-          </Text>
+          className="flex flex-row items-center w-full px-1 py-3"
+          onPress={handleLogout}>
+          <AntDesignIcon name="logout" size={22} color="#5e6980" />
+          <Text className="ml-8 text-sm font-medium font-roboto text-secondaryText">Log out</Text>
         </TouchableOpacity>
       </View>
     </DrawerContentScrollView>

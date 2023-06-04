@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { useEffect } from 'react';
 import { Linking } from 'react-native';
 
@@ -7,11 +7,11 @@ import { supabase } from '@src/utils/supabase';
 import { useAuth, type UserType } from '../AuthProvider';
 
 const LinkingProvider = ({ children }: { children: React.ReactNode }) => {
-  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+  const navigation = useNavigation<StackNavigationProp<any>>();
   const { setUser } = useAuth();
 
   useEffect(() => {
-    Linking.addEventListener('url', event => {
+    Linking.addEventListener('url', (event) => {
       let urlString = event.url;
       if (event.url.includes('auth#')) {
         urlString = event.url.replace('auth#', 'auth?');
@@ -27,11 +27,11 @@ const LinkingProvider = ({ children }: { children: React.ReactNode }) => {
             refresh_token: refreshToken,
             access_token: accessToken,
           })
-          .then(res => {
+          .then((res) => {
             const user = res.data.user;
             setUser(user as UserType);
           })
-          .catch(err => console.log({ err }));
+          .catch((err) => console.log({ err }));
       }
     });
     return () => {

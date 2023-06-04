@@ -4,15 +4,13 @@
  *
  * @format
  */
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StatusBar } from 'react-native';
-import Toast, {
-  ToastConfig,
-  ToastConfigParams,
-} from 'react-native-toast-message';
+import Toast, { ToastConfig, ToastConfigParams } from 'react-native-toast-message';
 
 import RootContainer from '@src/containers';
 import { CustomToast } from '@src/components';
+import { WithSplashScreen } from '@src/components/WithSplashScreen';
 
 const ToastConfigs: ToastConfig = {
   success: (props: ToastConfigParams<any>) => <CustomToast {...props} />,
@@ -22,12 +20,18 @@ const ToastConfigs: ToastConfig = {
 };
 
 function App(): JSX.Element {
+  const [isAppReady, setIsAppReady] = React.useState(false);
+
+  useEffect(() => {
+    setIsAppReady(true);
+  }, []);
+
   return (
-    <>
-      <StatusBar barStyle='light-content' backgroundColor='#1a1e24' />
+    <WithSplashScreen isAppReady={isAppReady}>
+      <StatusBar barStyle="light-content" backgroundColor="#1a1e24" />
       <RootContainer />
       <Toast config={ToastConfigs} />
-    </>
+    </WithSplashScreen>
   );
 }
 

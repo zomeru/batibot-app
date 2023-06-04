@@ -8,7 +8,7 @@ import { TextInput } from '@src/components/Input';
 import { useAuthenticate } from '@src/hooks/useAuthenticate';
 import { AuthProps } from '@src/navigators/AuthNavigator';
 
-export default function VerifyEmailScreen({ route }: AuthProps) {
+export default function VerifyEmailScreen({ route, navigation }: AuthProps) {
   const [code, setCode] = useState('');
   const [loading, setLoading] = useState(false);
   const [otpSending, setOtpSending] = useState(false);
@@ -20,20 +20,20 @@ export default function VerifyEmailScreen({ route }: AuthProps) {
   };
 
   return (
-    <View className='flex items-center justify-center flex-1 w-screen h-screen px-10 bg-primaryBackground'>
-      <Text className='text-2xl font-bold text-center text-primaryText'>
+    <View className="flex items-center justify-center flex-1 w-screen h-screen px-10 bg-primaryBackground">
+      <Text className="text-2xl font-bold text-center font-roboto text-primaryText">
         Verify Your Email
       </Text>
-      <Text className='mb-5 text-sm font-medium text-center text-secondaryText'>
+      <Text className="mb-5 text-sm font-medium text-center font-roboto text-secondaryText">
         {route.params?.message
           ? route.params?.message
           : 'Thank you for signing up! Please check your email and copy the OTP we sent you to verify your account.'}
       </Text>
 
       <TextInput
-        placeholder='6-digit OTP'
+        placeholder="6-digit OTP"
         maxLength={6}
-        keyboardType='number-pad'
+        keyboardType="number-pad"
         value={code}
         setValue={(text: string) => {
           const re = /^[0-9\b]+$/;
@@ -50,18 +50,25 @@ export default function VerifyEmailScreen({ route }: AuthProps) {
             email: route.params?.email as string,
           })
         }
-        title='Verify'
+        title="Verify"
         loading={loading}
         disabled={loading}
-        className='mt-5'
+        className="mt-5"
       />
       {otpSending ? (
-        <ActivityIndicator className='my-[40px]' size='small' />
+        <ActivityIndicator className="my-[40px]" size="small" />
       ) : (
-        <TouchableOpacity className='my-10' onPress={handleResendOTP}>
-          <Text className='text-secondaryText'>Resend OTP</Text>
+        <TouchableOpacity className="my-10" onPress={handleResendOTP}>
+          <Text className="font-roboto text-secondaryText">Resend OTP</Text>
         </TouchableOpacity>
       )}
+
+      <TouchableOpacity
+        onPress={() => {
+          navigation.goBack();
+        }}>
+        <Text className="font-roboto text-secondaryText">Go back</Text>
+      </TouchableOpacity>
     </View>
   );
 }
