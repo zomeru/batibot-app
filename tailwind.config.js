@@ -18,6 +18,9 @@ module.exports = {
         warning: '#ffaf40',
         info: '#3eb7d1',
       },
+      fontFamily: {
+        roboto: ['Roboto'],
+      },
     },
   },
   plugins: [],
