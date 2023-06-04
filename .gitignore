@@ -66,3 +66,4 @@ yarn-error.log
 # ENV variables
 .env.local
 .env
+.envrc
