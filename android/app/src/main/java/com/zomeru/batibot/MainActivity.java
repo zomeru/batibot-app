@@ -1,4 +1,4 @@
-package com.batibotrn;
+package com.zomeru.batibot;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;

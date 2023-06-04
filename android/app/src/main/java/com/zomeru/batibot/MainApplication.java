@@ -1,4 +1,4 @@
-package com.batibotrn;
+package com.zomeru.batibot;
 
 import android.app.Application;
 import com.facebook.react.PackageList;
