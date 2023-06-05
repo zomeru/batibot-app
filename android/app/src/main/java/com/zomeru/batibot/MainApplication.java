@@ -1,6 +1,5 @@
 package com.zomeru.batibot;
 
-// b/android/app/src/main/java/com/zomeru/batibot/MainApplication.java
 
 import android.app.Application;
 import com.facebook.react.PackageList;
