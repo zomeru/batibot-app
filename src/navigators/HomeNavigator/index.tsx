@@ -4,11 +4,10 @@ import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
 import { TouchableOpacity } from 'react-native';
-import { getHeaderTitle } from '@react-navigation/elements';
+import { NavigationProp, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 
 import { AboutScreen, HomeScreen, ConversationScreen, HistoryScreen } from '@src/screens';
 import CustomDrawerContent from './CustomDrawer';
-import { NavigationProp, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 
 export enum HOME_STACK {
   HOME = 'Home',
@@ -135,7 +134,6 @@ export const NewChatIcon = () => {
       onPress={() => {
         navigation.navigate(HOME_STACK.HOME, {
           isNew: true,
-          // title: 'New chat',
         });
       }}>
       <EntypoIcon name="new-message" size={20} color={!isNew ? '#3eb7d1' : '#5e626d'} />

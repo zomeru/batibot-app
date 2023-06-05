@@ -1,8 +1,9 @@
 import EncryptedStorage from 'react-native-encrypted-storage';
-import {createClient} from '@supabase/supabase-js';
+import { createClient } from '@supabase/supabase-js';
 import Toast from 'react-native-toast-message';
-import {SUPABASE_URL, SUPABASE_SERVICE_KEY} from '@env';
-import {Linking} from 'react-native';
+import { SUPABASE_URL, SUPABASE_SERVICE_KEY } from '@env';
+import { Linking } from 'react-native';
+import InAppBrowser from 'react-native-inappbrowser-reborn';
 
 const SecureStoreAdapter = {
   getItem: (key: string) => {
@@ -29,16 +30,39 @@ type OAuthProvider = 'google' | 'github' | 'discord';
 
 export const oAuthLogin = async (provider: OAuthProvider) => {
   const authUrl = `${SUPABASE_URL}/auth/v1/authorize?provider=${provider}&redirect_to=batibot://auth&prompt=consent`;
+  try {
+    const isAvailable = await InAppBrowser.isAvailable();
 
-  Linking.openURL(authUrl);
+    if (isAvailable) {
+      InAppBrowser.open(authUrl, {
+        // iOS Properties
+        dismissButtonStyle: 'cancel',
+        preferredBarTintColor: 'gray',
+        preferredControlTintColor: 'white',
+        // Android Properties
+        showTitle: true,
+        toolbarColor: '#3eb7d1',
+        secondaryToolbarColor: 'black',
+        enableUrlBarHiding: true,
+        enableDefaultShare: true,
+        forceCloseOnRedirection: true,
+      });
+    } else {
+      Linking.openURL(authUrl);
+    }
+  } catch (error) {
+    console.log({
+      oAuthLoginError: error,
+    });
+  }
 };
 
 export const resendOTP = async (
   email: string,
-  setLoading?: React.Dispatch<React.SetStateAction<boolean>>,
+  setLoading?: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
   if (setLoading) setLoading(true);
-  const {data, error} = await supabase.auth.resend({
+  const { data, error } = await supabase.auth.resend({
     email: email!,
     type: 'signup',
   });

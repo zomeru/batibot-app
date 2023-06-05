@@ -3,11 +3,11 @@ import {
   DrawerContentScrollView,
   DrawerItemList,
 } from '@react-navigation/drawer';
-import { supabase } from '@src/utils/supabase';
 import AntDesignIcon from 'react-native-vector-icons/AntDesign';
+import { Text, TouchableOpacity, View } from 'react-native';
 
 import { useAuth } from '@src/contexts/AuthProvider';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { supabase } from '@src/utils/supabase';
 import { isAndroid } from '@src/constants';
 
 function CustomDrawerContent(props: DrawerContentComponentProps) {

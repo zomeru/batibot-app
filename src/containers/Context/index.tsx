@@ -1,10 +1,6 @@
-import {AuthProvider, LinkingProvider} from '@src/contexts';
+import { AuthProvider, LinkingProvider } from '@src/contexts';
 
-export default function ContextContainer({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function ContextContainer({ children }: { children: React.ReactNode }) {
   return (
     <AuthProvider>
       <LinkingProvider>{children}</LinkingProvider>

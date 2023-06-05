@@ -2,18 +2,16 @@ import * as React from 'react';
 import { createNavigationContainerRef } from '@react-navigation/native';
 import { createStackNavigator, StackScreenProps, TransitionPresets } from '@react-navigation/stack';
 
-import { AuthNavigator, HomeNavigator } from '@src/navigators';
+import { AuthLoadingNavigator } from '@src/navigators';
 import InitialLoadingScreen from '@src/screens/Loading';
 
 export enum ROOT_STACK {
-  AUTH = 'Auth_Stack',
-  HOME = 'Home_Stack',
+  AUTH_LOADING = 'Auth_Loading_Stack',
   LOADING = 'Loading_Stack',
 }
 
 export type RootStackParamList = {
-  [ROOT_STACK.AUTH]: undefined;
-  [ROOT_STACK.HOME]: undefined;
+  [ROOT_STACK.AUTH_LOADING]: undefined;
   [ROOT_STACK.LOADING]: undefined;
 };
 
@@ -42,16 +40,9 @@ export default function RootNavigation() {
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name={ROOT_STACK.AUTH}
-        component={AuthNavigator}
+        name={ROOT_STACK.AUTH_LOADING}
+        component={AuthLoadingNavigator}
         options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name={ROOT_STACK.HOME}
-        component={HomeNavigator}
-        options={{
-          headerShown: false,
-        }}
       />
     </Stack.Navigator>
   );

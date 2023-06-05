@@ -11,7 +11,7 @@ An AI-powered messaging companion app for iOS and Android.
 
 ## 🛠 Set Up
 
-- To enable the functionality of Oauth, you must configure your oAuth provider within the Supabase dashboard.
+- To enable the functionality of oAuth, you must configure your oAuth provider within the Supabase dashboard.
 
 ```bash
 # install dependencies
