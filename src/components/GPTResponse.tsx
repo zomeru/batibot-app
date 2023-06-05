@@ -1,6 +1,7 @@
 import { Image, Text, View } from 'react-native';
 import TypeWriter from 'react-native-typewriter';
 import JumpingDots from './JumpingDots';
+import FormattedText from './FormattedText';
 
 export type ConversationType = 'old' | 'new';
 
@@ -37,7 +38,7 @@ export default function GPTResponse({ response, type, gptTyping }: UserPromptPro
                 {response}
               </TypeWriter>
             ) : (
-              <Text className="font-roboto flex-shrink-1 text-promptText">{response}</Text>
+              <FormattedText text={response} />
             )}
           </>
         )}

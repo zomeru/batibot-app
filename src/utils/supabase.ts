@@ -4,6 +4,7 @@ import Toast from 'react-native-toast-message';
 import { SUPABASE_URL, SUPABASE_SERVICE_KEY } from '@env';
 import { Linking } from 'react-native';
 import { InAppBrowser } from 'react-native-inappbrowser-reborn';
+import { openInAppBrowser } from './other';
 
 const SecureStoreAdapter = {
   getItem: (key: string) => {
@@ -30,45 +31,8 @@ type OAuthProvider = 'google' | 'github' | 'discord';
 
 export const oAuthLogin = async (provider: OAuthProvider) => {
   const authUrl = `${SUPABASE_URL}/auth/v1/authorize?provider=${provider}&redirect_to=batibot://auth&prompt=consent`;
-  try {
-    const isAvailable = await InAppBrowser.isAvailable();
 
-    if (isAvailable) {
-      InAppBrowser.open(authUrl, {
-        // iOS Properties
-        dismissButtonStyle: 'cancel',
-        preferredBarTintColor: '#1a1e24',
-        preferredControlTintColor: 'white',
-        readerMode: false,
-        animated: true,
-        modalPresentationStyle: 'fullScreen',
-        modalTransitionStyle: 'coverVertical',
-        modalEnabled: true,
-        enableBarCollapsing: false,
-        // Android Properties
-        showTitle: true,
-        toolbarColor: '#1a1e24',
-        secondaryToolbarColor: '#1a1e24',
-        navigationBarColor: '#1a1e24',
-        navigationBarDividerColor: 'white',
-        enableUrlBarHiding: true,
-        enableDefaultShare: true,
-        forceCloseOnRedirection: true,
-        animations: {
-          startEnter: 'slide_in_right',
-          startExit: 'slide_out_left',
-          endEnter: 'slide_in_left',
-          endExit: 'slide_out_right',
-        },
-      });
-    } else {
-      Linking.openURL(authUrl);
-    }
-  } catch (error) {
-    console.log({
-      oAuthLoginError: error,
-    });
-  }
+  await openInAppBrowser(authUrl);
 };
 
 export const resendOTP = async (

@@ -1,8 +1,10 @@
-import { Image, Text, View } from 'react-native';
+import { Image, View } from 'react-native';
+
+import FormattedText from './FormattedText';
 
 interface UserPromptProps {
   imageUrl: string;
-  prompt?: string;
+  prompt: string;
 }
 
 export default function UserPrompt({ imageUrl, prompt }: UserPromptProps) {
@@ -17,7 +19,7 @@ export default function UserPrompt({ imageUrl, prompt }: UserPromptProps) {
         }}
       />
       <View className="mt-1 mr-7">
-        <Text className="font-roboto flex-shrink-1 text-promptText">{prompt}</Text>
+        <FormattedText text={prompt} />
       </View>
     </View>
   );

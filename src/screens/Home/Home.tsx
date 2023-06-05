@@ -33,12 +33,14 @@ export default function HomeScreen({ route, navigation }: HomeProps) {
   }, [route?.params]);
 
   return (
-    <Conversation
-      conversationList={conversationList}
-      prompt={prompt}
-      setPrompt={setPrompt}
-      handleSendMessage={handleSendMessage}
-      gptTyping={gptTyping}
-    />
+    <>
+      <Conversation
+        conversationList={conversationList}
+        prompt={prompt}
+        setPrompt={setPrompt}
+        handleSendMessage={handleSendMessage}
+        gptTyping={gptTyping}
+      />
+    </>
   );
 }
