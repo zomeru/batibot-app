@@ -18,6 +18,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@react-native-clipboard/clipboard": "^1.11.2",
     "@react-navigation/drawer": "^6.6.2",
     "@react-navigation/native": "^6.1.6",
     "@react-navigation/stack": "^6.3.16",

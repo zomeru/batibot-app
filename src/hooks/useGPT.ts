@@ -102,6 +102,10 @@ export const useGPT = (type: 'new' | 'old', conversationId?: number) => {
 
     const gptResponse = await generateGPTResponse(prompt, formattedRecentMessages);
 
+    console.log({
+      GPT: gptResponse,
+    });
+
     if (gptResponse) {
       const newConversationListWithResponse = newConversationList.map((conversation, index) => {
         if (index === newConversationList.length - 1) {

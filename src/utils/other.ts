@@ -1,5 +1,7 @@
 import { InAppBrowser } from 'react-native-inappbrowser-reborn';
 import { Linking } from 'react-native';
+import Clipboard from '@react-native-clipboard/clipboard';
+import Toast from 'react-native-toast-message';
 
 export const validateEmail = (email: string) => {
   return !!email.match(
@@ -73,4 +75,15 @@ export const openInAppBrowser = async (url: string, forceCloseOnRedirection: boo
   } catch (error) {
     Linking.openURL(url);
   }
+};
+
+export const copyCode = (text: string) => {
+  const newText = text.endsWith('') ? text.slice(0, text.length - 1) : text;
+  const finalText = newText.slice(3, text.length - 3);
+
+  Clipboard.setString(finalText);
+  Toast.show({
+    type: 'success',
+    text1: 'Copied to clipboard',
+  });
 };

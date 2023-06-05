@@ -10,12 +10,14 @@ export function ExternalLink({
   className,
   style,
   showIcon = false,
+  children,
 }: {
   href: string;
-  text: string;
+  text?: string;
   className?: string;
   style?: StyleProp<any>;
   showIcon?: boolean;
+  children?: React.ReactNode;
 }) {
   return (
     <Text
@@ -25,6 +27,7 @@ export function ExternalLink({
       style={style}
       className={`font-roboto text-primaryAccent ${className}`}>
       {text}
+      {children}
       {showIcon && <EvilIcon name="external-link" size={16} color="#3eb7d1" />}
     </Text>
   );

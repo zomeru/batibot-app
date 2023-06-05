@@ -1,6 +1,7 @@
-import { Text } from 'react-native';
+import { Text, View } from 'react-native';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
-import { splitByLinksAndCode, textChecker } from '@src/utils/other';
+import { copyCode, splitByLinksAndCode, textChecker } from '@src/utils/other';
 import { ExternalLink } from './ExternalLink';
 
 const FormattedText = ({ text }: { text: string }) => (
@@ -19,13 +20,29 @@ const FormattedText = ({ text }: { text: string }) => (
         );
       }
 
-      if (textType === 'small_code' || textType === 'big_code') {
+      if (textType === 'small_code') {
         return (
           <Text
             key={split + i}
             className="font-roboto flex-shrink-1 rounded-sm text-[#b65454] bg-[#08090a5d] italic ">
             {split.replace(/`/g, '')}
           </Text>
+        );
+      }
+
+      if (textType === 'big_code') {
+        const newSplit = split.endsWith('') ? split.slice(0, text.length - 1) : text;
+        const finalText = newSplit.slice(3, newSplit.length - 3);
+
+        return (
+          <View key={split + i} className="bg-[#2d2727]">
+            <Text className="text-xs text-primaryAccent" onPress={() => copyCode(finalText)}>
+              Copy Code <AntDesign name="copy1" size={12} />
+            </Text>
+            <Text className="font-roboto flex-shrink-1 rounded-sm text-[#b65454] italic ">
+              {finalText}
+            </Text>
+          </View>
         );
       }
 
