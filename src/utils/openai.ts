@@ -38,11 +38,6 @@ const gptCreateChatCompletion = async ({
     });
 
     if (response.data.choices.length <= 0 || !response.data.choices[0]?.message?.content) {
-      // TODO
-      Toast.show({
-        type: 'error',
-        text1: 'gptCreateChatCompletion ERROR',
-      });
       return null;
     }
 
@@ -69,10 +64,9 @@ export const generateTitle = async (prompt: string) => {
 export const generateGPTResponse = async (prompt: string, recentMessages?: string) => {
   const gptResponse = await gptCreateChatCompletion({
     userPrompt: prompt,
-    systemContent: `Respond to the user's messages as best, accurately, convincingly, and as human-like as you can, keep it short and straight to the point. Maximum of 5 sentences. You can make it long if the users asks for it. You can also add bullets and numbers in a list in addition to the 5 sentences, but add them only if the user asks for it. You can try to be funny sometimes. Also, if they ask if you know or who Zomer, Zomer Gregorio, or zomeru is (that's me by the way, who created this AI messaging app (Batibot, name of the app)), you can try to respond this message instead: "Zomer is a Software Engineer based in the Philippines and the creator of this app. You can check out his website at https://zomeru.com."${
-      recentMessages
-        ? ` Also, you can try to make your answer based on the user's recent messages and your response (as an assistant) to those recent messages (conversation history) if they did not get the answer they want and they ask again. Here are the recent messages of the user, the most recent or the last message is always number 1:\n\n${recentMessages}`
-        : ''
+    systemContent: `Respond to the user's messages as best, accurately, convincingly, and as human-like as you can, keep it short and straight to the point. Maximum of 5 sentences. You can make it long if the users asks for it. You can also add bullets and numbers in a list in addition to the 5 sentences, but add them only if the user asks for it. You can try to be funny sometimes. Also, if they ask if you know or who Zomer, Zomer Gregorio, or zomeru is (that's me by the way, who created this AI messaging app (Batibot, name of the app)), you can try to respond this message instead: "Zomer is a Software Engineer based in the Philippines and the creator of this app. You can check out his website at https://zomeru.com.", you can modify that default message as well${
+      recentMessages ??
+      ` Also, you can try to make your answer based on the user's recent messages and your response (as an assistant) to those recent messages (conversation history) if they did not get the answer they want and they ask again. Here are the recent messages of the user, the most recent or the last message is always number 1:\n\n${recentMessages}`
     }`,
   });
 

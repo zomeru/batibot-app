@@ -67,3 +67,6 @@ yarn-error.log
 .env.local
 .env
 .envrc
+
+# Other 
+index.android.bundle
