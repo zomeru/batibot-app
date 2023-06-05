@@ -151,7 +151,9 @@ export default function ConversationsScreen({ navigation }: HomeProps) {
                       conversationId: conversation.id,
                     });
                   }}>
-                  <Text className="text-sm font-roboto text-secondaryText">
+                  <Text
+                    numberOfLines={1}
+                    className="text-sm font-roboto text-secondaryText max-w-[90%]">
                     {conversation.title}
                   </Text>
                   <Text className="text-xs font-roboto text-secondaryText">{formattedDate}</Text>

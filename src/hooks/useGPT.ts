@@ -126,10 +126,10 @@ export const useGPT = (type: 'new' | 'old', conversationId?: number) => {
           title,
         });
         setTitleChanged(true);
-        const [data] = await createConversation(title!, user?.email!);
+        const [data] = await createConversation(title, user?.email!);
         setNewConversationId(data?.id);
 
-        const [message, messageError] = await createMessage({
+        createMessage({
           prompt,
           response: gptResponse,
           conversationId: data.id || conversationId!,
@@ -138,14 +138,14 @@ export const useGPT = (type: 'new' | 'old', conversationId?: number) => {
       } else {
         // Update the title even if it's still the same, so that the updated_at field is updated
         await updateConversation({
-          conversationId: newConversationId || conversationId!,
+          conversationId: newConversationId ?? conversationId!,
           title: conversationTitle,
         });
 
         await createMessage({
           prompt,
           response: gptResponse,
-          conversationId: newConversationId || conversationId!,
+          conversationId: newConversationId ?? conversationId!,
           user: user?.email!,
         });
       }

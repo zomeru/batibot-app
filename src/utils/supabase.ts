@@ -3,7 +3,7 @@ import { createClient } from '@supabase/supabase-js';
 import Toast from 'react-native-toast-message';
 import { SUPABASE_URL, SUPABASE_SERVICE_KEY } from '@env';
 import { Linking } from 'react-native';
-import InAppBrowser from 'react-native-inappbrowser-reborn';
+import { InAppBrowser } from 'react-native-inappbrowser-reborn';
 
 const SecureStoreAdapter = {
   getItem: (key: string) => {
@@ -37,15 +37,29 @@ export const oAuthLogin = async (provider: OAuthProvider) => {
       InAppBrowser.open(authUrl, {
         // iOS Properties
         dismissButtonStyle: 'cancel',
-        preferredBarTintColor: 'gray',
+        preferredBarTintColor: '#1a1e24',
         preferredControlTintColor: 'white',
+        readerMode: false,
+        animated: true,
+        modalPresentationStyle: 'fullScreen',
+        modalTransitionStyle: 'coverVertical',
+        modalEnabled: true,
+        enableBarCollapsing: false,
         // Android Properties
         showTitle: true,
-        toolbarColor: '#3eb7d1',
-        secondaryToolbarColor: 'black',
+        toolbarColor: '#1a1e24',
+        secondaryToolbarColor: '#1a1e24',
+        navigationBarColor: '#1a1e24',
+        navigationBarDividerColor: 'white',
         enableUrlBarHiding: true,
         enableDefaultShare: true,
         forceCloseOnRedirection: true,
+        animations: {
+          startEnter: 'slide_in_right',
+          startExit: 'slide_out_left',
+          endEnter: 'slide_in_left',
+          endExit: 'slide_out_right',
+        },
       });
     } else {
       Linking.openURL(authUrl);

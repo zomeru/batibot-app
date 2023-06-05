@@ -1,4 +1,3 @@
-import { StatusBar } from 'react-native';
 import { Image, ScrollView, Text, View } from 'react-native';
 import { Fragment, useRef, useState } from 'react';
 
@@ -33,9 +32,14 @@ function Conversation({
 
   const [defaultBottomPadding, setDefaultBottomPadding] = useState(0);
 
+  const sendPrompt = () => {
+    if (!gptTyping && prompt.length > 0) {
+      handleSendMessage();
+    }
+  };
+
   return (
     <View className="relative flex items-center justify-center flex-1 w-screen h-full bg-primaryBackground">
-      <StatusBar barStyle="light-content" />
       <View className="flex justify-between w-full h-full ">
         <View
           style={{
@@ -88,11 +92,7 @@ function Conversation({
             multiline
             iconName="send-sharp"
             showIcon
-            onIconPress={() => {
-              if (!gptTyping && prompt.length > 0) {
-                handleSendMessage();
-              }
-            }}
+            onIconPress={sendPrompt}
             onContentSizeChange={(e) => {
               setDefaultBottomPadding(e.nativeEvent.contentSize.height);
             }}

@@ -56,7 +56,7 @@ const gptCreateChatCompletion = async ({
 export const generateTitle = async (prompt: string) => {
   const generatedTitle = await gptCreateChatCompletion({
     userPrompt: prompt,
-    systemContent: `Please generate a title based on this prompt or question: "${prompt}". Make it straightforward and minimum of 2 words and maximum of 5 words.`,
+    systemContent: `Please generate a title based on this user's prompt or question: "${prompt}". Make it straightforward and minimum of 2 words and maximum of 5 words.`,
   });
 
   if (!generatedTitle) {
