@@ -31,7 +31,7 @@ const FormattedText = ({ text }: { text: string }) => (
       }
 
       if (textType === 'big_code') {
-        const newSplit = split.endsWith('') ? split.slice(0, text.length - 1) : text;
+        const newSplit = split.endsWith('') ? split.slice(0, split.length - 1) : split;
         const finalText = newSplit.slice(3, newSplit.length - 3);
 
         return (

@@ -22,6 +22,6 @@ Third-Party Services:
 Updates to the Privacy Policy:
 6.1 We reserve the right to update or modify this Privacy Policy at any time. Any changes will be effective immediately upon posting the revised version on our app.
 6.2 It is your responsibility to review the Privacy Policy periodically to stay informed about our data practices.
-If you have any questions or concerns about our Privacy Policy, please contact us at [Your Contact Email]. By continuing to use [Your Mobile App Name], you acknowledge that you have read and understood this Privacy Policy and consent to the collection and use of your personal information as described herein.
+If you have any questions or concerns about our Privacy Policy, please contact us at zomergregorio@gmail.com. By continuing to use Batibot, you acknowledge that you have read and understood this Privacy Policy and consent to the collection and use of your personal information as described herein.
 
 Last updated: June 3, 2023
