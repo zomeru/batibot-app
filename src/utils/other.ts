@@ -78,10 +78,7 @@ export const openInAppBrowser = async (url: string, forceCloseOnRedirection: boo
 };
 
 export const copyCode = (text: string) => {
-  const newText = text.endsWith('') ? text.slice(0, text.length - 1) : text;
-  const finalText = newText.slice(3, text.length - 3);
-
-  Clipboard.setString(finalText);
+  Clipboard.setString(text);
   Toast.show({
     type: 'success',
     text1: 'Copied to clipboard',
