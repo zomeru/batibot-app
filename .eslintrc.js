@@ -1,5 +1,14 @@
 module.exports = {
   root: true,
-  extends: '@react-native-community',
-  extends: ['@react-native-community', 'plugin:nativewind/recommended', 'eslint-config-prettier'],
+  extends: ['@react-native-community', 'eslint-config-prettier'],
+  rules: {
+    // JS
+    'no-useless-escape': 'off',
+
+    // React
+    'react/react-in-jsx-scope': 'off',
+
+    // React Native
+    'react-native/no-inline-styles': 'off',
+  },
 };

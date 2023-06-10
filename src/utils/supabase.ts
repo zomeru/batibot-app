@@ -2,8 +2,7 @@ import EncryptedStorage from 'react-native-encrypted-storage';
 import { createClient } from '@supabase/supabase-js';
 import Toast from 'react-native-toast-message';
 import { SUPABASE_URL, SUPABASE_SERVICE_KEY } from '@env';
-import { Linking } from 'react-native';
-import { InAppBrowser } from 'react-native-inappbrowser-reborn';
+
 import { openInAppBrowser, validateEmail } from './other';
 
 const SecureStoreAdapter = {

@@ -78,7 +78,7 @@ export const useGPT = (type: 'new' | 'old', conversationId?: number) => {
     return () => {
       clearTimeout(timer);
     };
-  }, [conversationId]);
+  }, [conversationId, navigation]);
 
   const handleSendMessage = async () => {
     setGptTyping(true);

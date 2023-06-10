@@ -13,7 +13,7 @@ function JumpingDots({ dots = 3, bounceHeight = 4, components = null }) {
       dotAnimations.push(new Animated.Value(0));
     }
     setAnimations(dotAnimations);
-  }, []);
+  }, [dots]);
 
   useEffect(() => {
     if (animations.length === 0) return;

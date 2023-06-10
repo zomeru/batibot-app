@@ -17,12 +17,12 @@ const SkeletonLoader = ({ width, height, style }: SkeletonLoaderProps) => {
   useEffect(() => {
     Animated.loop(
       Animated.timing(translateX, {
-        toValue: width || defaultWidth,
+        toValue: width ?? defaultWidth,
         duration: 1000,
         useNativeDriver: true,
       })
     ).start();
-  }, [width || defaultWidth]);
+  }, [width ?? defaultWidth]);
 
   return (
     <View

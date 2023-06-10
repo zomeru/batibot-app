@@ -1,4 +1,3 @@
-import { Style } from 'nativewind/dist/style-sheet/runtime';
 import {
   View,
   TextInput,

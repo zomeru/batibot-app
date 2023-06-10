@@ -44,7 +44,7 @@ export default function ConversationsScreen({ navigation }: HomeProps) {
   const fetchConversations = useCallback(async () => {
     const [conversations] = await getUserConversations(user?.email as string, limit);
     setMyConversations(conversations as ConversationsType);
-  }, [limit]);
+  }, [limit, user?.email]);
 
   useEffect(() => {
     if (initialLoading) {
@@ -61,7 +61,7 @@ export default function ConversationsScreen({ navigation }: HomeProps) {
       unsubscribe();
       clearTimeout(timer);
     };
-  }, [fetchConversations, initialLoading]);
+  }, [fetchConversations, initialLoading, navigation]);
 
   const handleScrollFetch = ({ nativeEvent }: NativeSyntheticEvent<NativeScrollEvent>) => {
     if (initialLoading) return;

@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Image, Text, TouchableOpacity, View } from 'react-native';
-import Toast from 'react-native-toast-message';
 
 import { DefaultButton, ProviderButton } from '@src/components/Button';
 import { TextInput } from '@src/components/Input';

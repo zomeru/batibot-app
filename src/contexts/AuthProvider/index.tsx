@@ -58,10 +58,10 @@ export default function Provider({ children }: { children: React.ReactNode }) {
 
     const { data: authData } = supabase.auth.onAuthStateChange(async (event, session) => {
       console.log('event', event);
-      const user = session?.user ?? undefined;
-      setUser(user as UserType);
-      if (user) {
-        await findOrCreateUser(user.email!, user.id);
+      const newUser = session?.user ?? undefined;
+      setUser(newUser as UserType);
+      if (newUser) {
+        await findOrCreateUser(newUser.email!, newUser.id);
       }
       setLoading(false);
     });
@@ -69,7 +69,7 @@ export default function Provider({ children }: { children: React.ReactNode }) {
     return () => {
       authData?.subscription?.unsubscribe();
     };
-  }, []);
+  }, [user]);
 
   const value = useMemo(() => ({ user, setUser }), [user]);
 
