@@ -41,7 +41,7 @@ export const Splash = ({ isAppReady }: { isAppReady: boolean }) => {
     if (state === FADE_IN_IMAGE) {
       Animated.timing(imageOpacity, {
         toValue: 1,
-        duration: 600, // Fade in duration
+        duration: 400, // Fade in duration
         useNativeDriver: true,
       }).start(() => {
         setState(WAIT_FOR_APP_TO_BE_READY);
@@ -61,8 +61,8 @@ export const Splash = ({ isAppReady }: { isAppReady: boolean }) => {
     if (state === FADE_OUT) {
       Animated.timing(containerOpacity, {
         toValue: 0,
-        duration: 600, // Fade out duration
-        delay: 600, // Minimum time the logo will stay visible
+        duration: 400, // Fade out duration
+        delay: 400, // Minimum time the logo will stay visible
         useNativeDriver: true,
       }).start(() => {
         setState(HIDDEN);

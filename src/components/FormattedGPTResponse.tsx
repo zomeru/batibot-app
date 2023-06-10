@@ -15,10 +15,6 @@ const FormattedGPTResponse = ({ text }: { text: string }) => {
     }
   };
 
-  // console.log({
-  //   text: splitByLinksAndCode(text.trim()),
-  // });
-
   return (
     <Text>
       {splitByLinksAndCode(text.trim()).map((split, i) => {

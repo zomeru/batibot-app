@@ -26,7 +26,7 @@
             <action android:name="android.intent.action.VIEW" />
             <category android:name="android.intent.category.DEFAULT" />
             <category android:name="android.intent.category.BROWSABLE" />
-            <data android:scheme="batibot" android:host="auth" android:pathPrefix="" />
+            <data android:scheme="com.zomeru.batibot" android:host="app" android:pathPrefix="" />
 
         </intent-filter>
       </activity>

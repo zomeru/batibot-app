@@ -4,7 +4,7 @@ import Toast from 'react-native-toast-message';
 import { SUPABASE_URL, SUPABASE_SERVICE_KEY } from '@env';
 import { Linking } from 'react-native';
 import { InAppBrowser } from 'react-native-inappbrowser-reborn';
-import { openInAppBrowser } from './other';
+import { openInAppBrowser, validateEmail } from './other';
 
 const SecureStoreAdapter = {
   getItem: (key: string) => {
@@ -37,26 +37,61 @@ export const oAuthLogin = async (provider: OAuthProvider) => {
 
 export const resendOTP = async (
   email: string,
-  setLoading?: React.Dispatch<React.SetStateAction<boolean>>
+  setLoading?: React.Dispatch<React.SetStateAction<boolean>>,
+  type: 'signup' | 'recovery' = 'signup'
 ) => {
-  if (setLoading) setLoading(true);
-  const { data, error } = await supabase.auth.resend({
-    email: email!,
-    type: 'signup',
-  });
-
-  if (data) {
+  if (!email) {
     Toast.show({
-      type: 'success',
-      text1: 'OTP sent!',
+      type: 'warning',
+      text1: 'Email is required.',
     });
+    return;
   }
 
-  if (error) {
+  if (!validateEmail(email)) {
     Toast.show({
-      type: 'error',
-      text1: error.message,
+      type: 'warning',
+      text1: 'Email is invalid.',
     });
+    return;
+  }
+
+  if (setLoading) setLoading(true);
+  if (type === 'signup') {
+    const { data, error } = await supabase.auth.resend({
+      email,
+      type,
+    });
+
+    if (data) {
+      Toast.show({
+        type: 'success',
+        text1: 'OTP sent!',
+      });
+    }
+
+    if (error) {
+      Toast.show({
+        type: 'error',
+        text1: error.message,
+      });
+    }
+  } else {
+    const { data, error } = await supabase.auth.resetPasswordForEmail(email);
+
+    if (data) {
+      Toast.show({
+        type: 'success',
+        text1: 'OTP sent!',
+      });
+    }
+
+    if (error) {
+      Toast.show({
+        type: 'error',
+        text1: error.message,
+      });
+    }
   }
 
   if (setLoading) setLoading(false);

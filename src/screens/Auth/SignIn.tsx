@@ -49,10 +49,7 @@ export default function SignInScreen({ navigation }: AuthProps) {
         <TouchableOpacity
           className="mt-4 mb-1"
           onPress={() => {
-            Toast.show({
-              type: 'info',
-              text1: 'Coming soon!',
-            });
+            navigation.navigate(AUTH_STACK.FORGOT_PASSWORD);
           }}>
           <Text className="text-sm font-medium text-right font-roboto text-secondaryText">
             Forgot password?

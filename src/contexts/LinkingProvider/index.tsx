@@ -13,8 +13,8 @@ const LinkingProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     Linking.addEventListener('url', (event) => {
       let urlString = event.url;
-      if (event.url.includes('auth#')) {
-        urlString = event.url.replace('auth#', 'auth?');
+      if (event.url.includes('app#')) {
+        urlString = event.url.replace('app#', 'app?');
       }
       const url = new URL(urlString);
 

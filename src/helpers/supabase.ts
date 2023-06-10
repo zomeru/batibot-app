@@ -1,12 +1,8 @@
-import {PostgrestError} from '@supabase/supabase-js';
-import {supabase} from '@src/utils/supabase';
+import { PostgrestError } from '@supabase/supabase-js';
+import { supabase } from '@src/utils/supabase';
 
 export const findOrCreateUser = async (email: string, uuid: string) => {
-  const {data, error} = await supabase
-    .from('users')
-    .select('*')
-    .eq('email', email)
-    .single();
+  const { data, error } = await supabase.from('users').select('*').eq('email', email).single();
 
   if (!data) {
     await supabase.from('users').insert([
@@ -26,9 +22,9 @@ type ConversationData = {
 };
 
 export const getConversation = async (
-  conversationId: number,
+  conversationId: number
 ): Promise<[data: ConversationData, error: PostgrestError | null]> => {
-  const {data, error} = await supabase
+  const { data, error } = await supabase
     .from('conversations')
     .select('title, id')
     .eq('id', conversationId)
@@ -37,35 +33,32 @@ export const getConversation = async (
   return [data as ConversationData, error];
 };
 
-export const getUserConversations = async (
-  email: string,
-  limit: number = 20,
-) => {
-  const {data, error} = await supabase
+export const getUserConversations = async (email: string, limit: number = 20) => {
+  const { data, error } = await supabase
     .from('conversations')
     .select('id, title, updated_at')
     .eq('user', email)
-    .order('updated_at', {ascending: false})
+    .order('updated_at', { ascending: false })
     .limit(limit);
 
   return [data, error];
 };
 
 export const getConversationMessages = async (conversationId: number) => {
-  const {data, error} = await supabase
+  const { data, error } = await supabase
     .from('messages')
     .select('prompt,response,id')
     .eq('conversation_id', conversationId)
-    .order('created_at', {ascending: true});
+    .order('created_at', { ascending: true });
 
   return [data, error];
 };
 
 export const createConversation = async (
   title: string,
-  email: string,
+  email: string
 ): Promise<[data: ConversationData, error: PostgrestError | null]> => {
-  const {data, error} = await supabase
+  const { data, error } = await supabase
     .from('conversations')
     .insert([
       {
@@ -92,7 +85,7 @@ export const createMessage = async ({
   conversationId,
   user,
 }: CreateMessageParams) => {
-  const {data, error} = await supabase
+  const { data, error } = await supabase
     .from('messages')
     .insert([
       {
@@ -114,11 +107,20 @@ export const updateConversation = async ({
   conversationId: number;
   title: string;
 }) => {
-  const {data, error} = await supabase
+  const { data, error } = await supabase
     .from('conversations')
-    .update({title, updated_at: new Date()})
+    .update({ title, updated_at: new Date() })
     .eq('id', conversationId)
     .select('id, title, updated_at');
+
+  return [data, error];
+};
+
+export const updateUser = async ({ email, password }: { email?: string; password?: string }) => {
+  const { data, error } = await supabase.auth.updateUser({
+    email,
+    password,
+  });
 
   return [data, error];
 };

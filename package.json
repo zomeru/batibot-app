@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "android": "react-native run-android",
-    "android:reset": "react-native start -- --reset-cache",
+    "reset": "react-native start -- --reset-cache",
     "android:clean": "concurrently \"yarn run clean\" \"yarn run android:reset\"",
     "clean": "rm -rf android/build && rm -rf android/app/build && rm -rf android/.gradle && cd android && ./gradlew clean && cd .. && watchman watch-del-all",
     "android:build:apk": "concurrently \"yarn run clean\" \"yarn run release:android:apk\"",
@@ -14,6 +14,8 @@
     "clear:duplicate": "rm -rf ./android/app/src/main/res/drawable-* && rm -rf ./android/app/src/main/res/raw",
     "ios": "react-native run-ios",
     "lint": "eslint .",
+    "check-types": "tsc --pretty --noEmit",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,md}\"",
     "start": "react-native start",
     "test": "jest"
   },

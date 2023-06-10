@@ -6,7 +6,7 @@ const isAndroid = Platform.OS === 'android';
 
 const MessagesLoader = () => {
   return (
-    <View className="flex flex-col items-start px-5 mt-[110px] mb-8 space-y-3">
+    <View className="flex flex-col items-start px-5 mt-[125px] mb-8 space-y-3">
       {Array(4)
         .fill(null)
         .map((_, index) => (

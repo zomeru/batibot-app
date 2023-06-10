@@ -1,6 +1,6 @@
 import { useState } from 'react';
-
 import { Text, View, TouchableOpacity, ActivityIndicator } from 'react-native';
+import Toast from 'react-native-toast-message';
 
 import { resendOTP } from '@src/utils/supabase';
 import { DefaultButton } from '@src/components/Button';
@@ -9,20 +9,36 @@ import { useAuthenticate } from '@src/hooks/useAuthenticate';
 import { AuthProps } from '@src/navigators/AuthNavigator';
 
 export default function VerifyEmailScreen({ route, navigation }: AuthProps) {
+  const type = route.params?.type;
+  const email = route.params?.email;
+  const title = route.params?.title;
+
   const [code, setCode] = useState('');
   const [loading, setLoading] = useState(false);
   const [otpSending, setOtpSending] = useState(false);
 
-  const { handleVerifyEmail } = useAuthenticate();
+  const { handleVerifyOTP } = useAuthenticate();
+
+  const showError = () => {
+    Toast.show({
+      type: 'error',
+      text1: 'Something went wrong. Please try again later.',
+    });
+  };
 
   const handleResendOTP = async () => {
-    await resendOTP(route.params?.email as string, setOtpSending);
+    if (!type || !email) {
+      showError();
+      return;
+    }
+
+    await resendOTP(email, setOtpSending, type);
   };
 
   return (
     <View className="flex items-center justify-center flex-1 w-screen h-screen px-10 bg-primaryBackground">
       <Text className="text-2xl font-bold text-center font-roboto text-primaryText">
-        Verify Your Email
+        {title ? title : 'Verify Your Email'}
       </Text>
       <Text className="mb-5 text-sm font-medium text-center font-roboto text-secondaryText">
         {route.params?.message
@@ -43,13 +59,19 @@ export default function VerifyEmailScreen({ route, navigation }: AuthProps) {
         }}
       />
       <DefaultButton
-        onPress={async () =>
-          await handleVerifyEmail({
+        onPress={async () => {
+          if (!email || !type) {
+            showError();
+            return;
+          }
+
+          await handleVerifyOTP({
             code,
             setLoading,
-            email: route.params?.email as string,
-          })
-        }
+            email,
+            type,
+          });
+        }}
         title="Verify"
         loading={loading}
         disabled={loading}

@@ -71,8 +71,6 @@ export default function Provider({ children }: { children: React.ReactNode }) {
     };
   }, []);
 
-  useEffect(() => {}, []);
-
   const value = useMemo(() => ({ user, setUser }), [user]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

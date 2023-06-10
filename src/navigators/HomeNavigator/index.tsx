@@ -6,14 +6,22 @@ import EntypoIcon from 'react-native-vector-icons/Entypo';
 import { TouchableOpacity } from 'react-native';
 import { NavigationProp, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 
-import { AboutScreen, HomeScreen, ConversationScreen, HistoryScreen } from '@src/screens';
+import {
+  AboutScreen,
+  HomeScreen,
+  ConversationScreen,
+  HistoryScreen,
+  SettingsScreen,
+} from '@src/screens';
 import CustomDrawerContent from './CustomDrawer';
+import { useAuth } from '@src/contexts/AuthProvider';
 
 export enum HOME_STACK {
   HOME = 'Home',
   CONVERSATION = 'Conversation',
   HISTORY = 'History',
   ABOUT = 'About',
+  SETTINGS = 'Settings',
 }
 
 type HomeParams =
@@ -29,6 +37,7 @@ export type HomeStackParamList = {
   [HOME_STACK.CONVERSATION]: Exclude<HomeParams, undefined>;
   [HOME_STACK.HISTORY]: undefined;
   [HOME_STACK.ABOUT]: undefined;
+  [HOME_STACK.SETTINGS]: undefined;
 };
 
 export type HomeProps = StackScreenProps<HomeStackParamList, HOME_STACK>;
@@ -36,6 +45,8 @@ export type HomeProps = StackScreenProps<HomeStackParamList, HOME_STACK>;
 const Drawer = createDrawerNavigator<HomeStackParamList>();
 
 export default function AuthNavigator() {
+  const { user } = useAuth();
+
   return (
     <Drawer.Navigator
       screenOptions={{
@@ -81,6 +92,16 @@ export default function AuthNavigator() {
           drawerIcon: HistoryIcon,
         }}
       />
+      {user?.app_metadata?.provider === 'email' && (
+        <Drawer.Screen
+          name={HOME_STACK.SETTINGS}
+          component={SettingsScreen}
+          options={{
+            headerTitle: 'Settings',
+            drawerIcon: AboutIcon,
+          }}
+        />
+      )}
       <Drawer.Screen
         name={HOME_STACK.ABOUT}
         component={AboutScreen}

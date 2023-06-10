@@ -6,34 +6,29 @@ import { findOrCreateUser } from '@src/helpers/supabase';
 import { validateEmail } from '@src/utils/other';
 import { supabase, resendOTP } from '@src/utils/supabase';
 import { AUTH_STACK, AuthStackParamList } from '@src/navigators/AuthNavigator';
+import { OmitType } from '@src/utils/ts';
 
-interface SignInParams {
+interface AuthParams {
   email: string;
   password: string;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-interface SignUpParams {
-  email: string;
-  password: string;
+interface SignUpParams extends AuthParams {
   confirmPassword: string;
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-interface VerifyEmailParams {
-  email: string;
+interface VerifyEmailParams extends OmitType<AuthParams, 'password'> {
   code: string;
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  type: 'signup' | 'recovery';
 }
+
+interface ForgotPasswordParams extends OmitType<AuthParams, 'password'> {}
 
 export const useAuthenticate = () => {
   const navigation = useNavigation<NavigationProp<AuthStackParamList>>();
 
-  const handleSignIn = async ({
-    email,
-    password,
-    setLoading,
-  }: SignInParams) => {
+  const handleSignIn = async ({ email, password, setLoading }: AuthParams) => {
     if (!email || !password) {
       Toast.show({
         type: 'warning',
@@ -43,7 +38,7 @@ export const useAuthenticate = () => {
     }
     setLoading(true);
     let { error } = await supabase.auth.signInWithPassword({
-      email,
+      email: email.toLowerCase().trim(),
       password,
     });
 
@@ -57,6 +52,8 @@ export const useAuthenticate = () => {
         navigation.navigate(AUTH_STACK.VERIFY, {
           email: email.toLowerCase().trim(),
           message: `Please verify your email address to continue using Batibot.`,
+          type: 'signup',
+          title: 'Verify Email',
         });
 
         return;
@@ -71,12 +68,7 @@ export const useAuthenticate = () => {
     setLoading(false);
   };
 
-  const handleSignUp = async ({
-    email,
-    password,
-    confirmPassword,
-    setLoading,
-  }: SignUpParams) => {
+  const handleSignUp = async ({ email, password, confirmPassword, setLoading }: SignUpParams) => {
     const lowerCaseEmail = email.toLowerCase().trim();
 
     if (!lowerCaseEmail || !password || !confirmPassword) {
@@ -105,7 +97,7 @@ export const useAuthenticate = () => {
     setLoading(true);
 
     let { data, error } = await supabase.auth.signUp({
-      email,
+      email: lowerCaseEmail,
       password,
     });
 
@@ -129,21 +121,19 @@ export const useAuthenticate = () => {
       } else {
         navigation.navigate(AUTH_STACK.VERIFY, {
           email: data.user?.email!,
+          type: 'signup',
+          title: 'Verify Email',
         });
       }
     }
     setLoading(false);
   };
 
-  const handleVerifyEmail = async ({
-    code,
-    setLoading,
-    email,
-  }: VerifyEmailParams) => {
+  const handleVerifyOTP = async ({ code, setLoading, email, type }: VerifyEmailParams) => {
     if (!code) {
       Toast.show({
         type: 'warning',
-        text1: 'Please enter the code we sent you.',
+        text1: 'Please enter the code we sent to your email.',
       });
       return;
     }
@@ -152,7 +142,7 @@ export const useAuthenticate = () => {
 
     const { data, error } = await supabase.auth.verifyOtp({
       token: code.trim(),
-      type: 'signup',
+      type,
       email,
     });
 
@@ -164,9 +154,58 @@ export const useAuthenticate = () => {
     }
 
     if (data) {
+      if (type === 'signup') {
+        Toast.show({
+          type: 'success',
+          text1: 'Email verified!',
+        });
+      } else {
+        navigation.setParams({
+          type: 'recovery',
+        });
+      }
+    }
+
+    setLoading(false);
+  };
+
+  const handleForgotPassword = async ({ email, setLoading }: ForgotPasswordParams) => {
+    if (!email) {
+      Toast.show({
+        type: 'warning',
+        text1: 'Please enter your email address.',
+      });
+      return;
+    }
+
+    const isEmailValid = validateEmail(email);
+    if (!isEmailValid) {
+      Toast.show({
+        type: 'warning',
+        text1: 'Please enter a valid email address.',
+      });
+      return;
+    }
+
+    setLoading(true);
+
+    const { error } = await supabase.auth.resetPasswordForEmail(email.toLowerCase().trim());
+
+    if (error) {
+      Toast.show({
+        type: 'error',
+        text1: error.message,
+      });
+    } else {
       Toast.show({
         type: 'success',
-        text1: 'Email verified!',
+        text1: 'OTP sent!',
+      });
+      navigation.navigate(AUTH_STACK.VERIFY, {
+        email,
+        type: 'recovery',
+        title: 'Log in using OTP',
+        message: `Please enter the code we sent to your email to log in your account.`,
       });
     }
 
@@ -176,6 +215,7 @@ export const useAuthenticate = () => {
   return {
     handleSignIn,
     handleSignUp,
-    handleVerifyEmail,
+    handleVerifyOTP,
+    handleForgotPassword,
   };
 };
