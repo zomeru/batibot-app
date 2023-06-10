@@ -30,9 +30,7 @@ export const fetchMoreConversation = async ({
   const newLimit = limit + 20;
   const [newConversations] = await getUserConversations(email, newLimit);
 
-  if (
-    (newConversations as ConversationsType)?.length === myConversations.length
-  ) {
+  if ((newConversations as ConversationsType)?.length === myConversations.length) {
     Toast.show({
       type: 'info',
       text1: 'No more conversations',

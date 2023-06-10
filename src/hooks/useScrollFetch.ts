@@ -27,12 +27,10 @@ export const useScrollViewFetch = () => {
     const { layoutMeasurement, contentOffset, contentSize } = nativeEvent;
 
     const isScrolledToBottom =
-      layoutMeasurement.height + contentOffset.y >= contentSize.height - 20 &&
-      contentOffset.y > 0;
+      layoutMeasurement.height + contentOffset.y >= contentSize.height - 20 && contentOffset.y > 0;
 
     const isScrolledToTop =
-      layoutMeasurement.height + contentOffset.y >= contentSize.height - 20 &&
-      contentOffset.y < 0;
+      layoutMeasurement.height + contentOffset.y >= contentSize.height - 20 && contentOffset.y < 0;
 
     if (isScrolledToBottom && isScrolling) {
       setAtBottom(true);

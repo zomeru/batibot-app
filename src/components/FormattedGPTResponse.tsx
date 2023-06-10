@@ -28,7 +28,7 @@ const FormattedGPTResponse = ({ text }: { text: string }) => {
                 onTypingEnd={() => onTypingEnd(i)}
                 typing={1}
                 initialDelay={0}
-                maxDelay={20}
+                maxDelay={0}
                 minDelay={0}
                 className="font-roboto flex-shrink-1 rounded-sm text-[#3eb7d1]">
                 {split}
@@ -43,7 +43,7 @@ const FormattedGPTResponse = ({ text }: { text: string }) => {
                 onTypingEnd={() => onTypingEnd(i)}
                 typing={1}
                 initialDelay={0}
-                maxDelay={20}
+                maxDelay={0}
                 minDelay={0}
                 className="font-roboto flex-shrink-1 rounded-sm text-[#b65454] bg-[#08090a5d] italic ">
                 {split.replace(/`/g, '')}
@@ -64,7 +64,7 @@ const FormattedGPTResponse = ({ text }: { text: string }) => {
                   onTypingEnd={() => onTypingEnd(i)}
                   typing={1}
                   initialDelay={0}
-                  maxDelay={20}
+                  maxDelay={0}
                   minDelay={0}
                   className="font-roboto flex-shrink-1 rounded-sm text-[#b65454] italic ">
                   {finalText}
@@ -80,7 +80,7 @@ const FormattedGPTResponse = ({ text }: { text: string }) => {
                 onTypingEnd={() => onTypingEnd(i)}
                 typing={1}
                 initialDelay={0}
-                maxDelay={20}
+                maxDelay={0}
                 minDelay={0}
                 className="font-roboto flex-shrink-1 text-promptText">
                 {split}

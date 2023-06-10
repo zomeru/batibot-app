@@ -29,11 +29,7 @@ function JumpingDots({ dots = 3, bounceHeight = 4, components = null }) {
     }).start();
   }
 
-  function floatAnimation(
-    node: Animated.Value,
-    reverseY: boolean,
-    delay: number
-  ) {
+  function floatAnimation(node: Animated.Value, reverseY: boolean, delay: number) {
     const floatSequence = Animated.sequence([
       Animated.timing(node, {
         toValue: reverseY ? bounceHeight : -bounceHeight,
@@ -75,8 +71,7 @@ function JumpingDots({ dots = 3, bounceHeight = 4, components = null }) {
         components ? (
           <Animated.View
             key={`loading-anim-${index}`}
-            style={[{ transform: [{ translateY: animation }] }]}
-          >
+            style={[{ transform: [{ translateY: animation }] }]}>
             {components[index]}
           </Animated.View>
         ) : (

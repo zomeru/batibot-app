@@ -6,7 +6,7 @@ const isAndroid = Platform.OS === 'android';
 
 const ConversationsLoader = () => {
   return (
-    <View className='flex flex-col items-start px-5 mb-8 space-y-3'>
+    <View className="flex flex-col items-start px-5 mb-8 space-y-3">
       {Array(isAndroid ? 20 : 14)
         .fill(null)
         .map((_, index) => (

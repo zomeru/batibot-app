@@ -1,5 +1,4 @@
-import { Image, Text, View } from 'react-native';
-import TypeWriter from 'react-native-typewriter';
+import { Image, View } from 'react-native';
 import JumpingDots from './JumpingDots';
 import FormattedText from './FormattedText';
 import FormattedGPTResponse from './FormattedGPTResponse';
